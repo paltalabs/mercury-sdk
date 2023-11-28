@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# Set the current directory
+currentDir=$(pwd)
+
+# Set the name, image and version for the Docker container
+containerName=mercurySdk
+imageName=node
+versionTag=18.18.2
+
+# Display the command being executed
+echo "Command: $1"
+
+# Check if there is a previous Docker container with the same name
+echo "Searching for a previous docker container"
+containerID=$(docker ps --filter="name=${containerName}" --all --quiet)
+if [[ ${containerID} ]]; then
+    echo "Start removing container."
+    # Remove the previous Docker container
+    docker rm --force ${containerName}
+    echo "Finished removing container."
+else
+    echo "No previous container was found"
+fi
+
+# Run a new Docker container
+docker run --volume ${currentDir}/:/workspace \
+           --volume ${currentDir}/../../paltalabs/mercury-sdk:/linked_sdk \
+           --name ${containerName} \
+           --interactive \
+           --publish 3001:3000 \
+           --workdir="/workspace" \
+           --env-file .env \
+           --tty \
+           --detach \
+           --publish-all \
+           --memory=12g \
+           --privileged \
+           --net-alias ${containerName} \
+           ${imageName}:${versionTag}
+
+# Set the git config
+# docker exec $containerName git config --global --add safe.directory /workspace
+
+# Connect to bash on Docker container
+docker exec --tty --interactive $containerName bash
