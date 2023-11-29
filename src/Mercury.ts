@@ -95,7 +95,7 @@ export class Mercury {
     const body = this._createRequestBody(args, {
       maxSingleSize: this._defaultMaxSingleSize,
     });
-    return this._backendRequest("POST", "/contract", body);
+    return this._backendRequest("POST", "/event", body);
   }
 
   /**
@@ -121,7 +121,7 @@ export class Mercury {
     const body = this._createRequestBody(args, {
       maxSingleSize: this._defaultMaxSingleSize,
     });
-    return this._backendRequest("POST", "/ledger", body);
+    return this._backendRequest("POST", "/entry", body);
   }
 
   /**
