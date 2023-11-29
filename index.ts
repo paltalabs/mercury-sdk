@@ -1,6 +1,6 @@
 // index.ts
 
-import * as Greet from './src/greet'
+import * as Greet from "./src/greet";
 
-export {Mercury} from './src/MercuryGraphQL'
-export default Greet
+export { Mercury } from "./src/Mercury";
+export default Greet;

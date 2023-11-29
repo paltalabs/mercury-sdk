@@ -1,6 +1,6 @@
 // index.ts
-const greet = (): void => {
-    console.log("Hello from mercury-sdk");
+const greet = async () => {
+  console.log("Hello from mercury-sdk");
 };
 
 export { greet };
