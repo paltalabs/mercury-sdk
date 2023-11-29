@@ -1,12 +1,13 @@
 {
   "name": "mercury-sdk",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "handles subscriptions, data retrieval and processing of mercury indexer",
   "main": "dist/index.js",
   "repository": "https://github.com/paltalabs/mercury-sdk",
   "author": "paltalabs",
   "license": "GNU",
   "private": false,
+  "keywords": ["mercury", "indexer", "stellar", "soroban"],
   "dependencies": {
     "axios": "^1.6.2",
     "typescript": "^5.3.2"
