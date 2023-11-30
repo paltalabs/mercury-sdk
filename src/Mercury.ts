@@ -1,24 +1,29 @@
-import { AxiosError, AxiosInstance } from "axios";
+import { AxiosError, AxiosHeaders, AxiosInstance, AxiosRequestHeaders } from "axios";
 import {
   ApiResponse,
+  GraphQLResponse,
   SubscribeToContractEventsArgs,
   SubscribeToFullAccountArgs,
   SubscribeToLedgerEntriesArgs,
   SubscribeToLedgerEntriesExpirationArgs,
 } from "./types";
 import { createAxiosInstance, toSnakeCase } from "./utils";
-
 interface MercuryOptions {
   backendEndpoint: string;
   accessToken: string;
   graphqlEndpoint: string;
   defaultMaxSingleSize?: number;
+  email?: string;
+  password?: string;
 }
 
 export class Mercury {
   private readonly _backendInstance: AxiosInstance;
   private readonly _graphqlInstance: AxiosInstance;
   private readonly _defaultMaxSingleSize: number;
+  private _accessToken: string;
+  private _email: string | undefined;
+  private _password: string | undefined;
 
   /**
    * Constructs a Mercury instance with given configuration options.
@@ -26,6 +31,8 @@ export class Mercury {
    *  - backendEndpoint: URL of the backend endpoint.
    *  - graphqlEndpoint: URL of the graphql endpoint.
    *  - accessToken: Your mercury access token.
+   *  - email: Email associated with the Mercury account (optional).
+   *  - password: Password for the Mercury account (optional).
    *  - defaultMaxSingleSize (optional): Default max single size for subscriptions.
    *  If not provided, the default value is 2000.
    */
@@ -39,6 +46,17 @@ export class Mercury {
       options.accessToken
     );
     this._defaultMaxSingleSize = options.defaultMaxSingleSize ?? 2000;
+    this._accessToken = options.accessToken;
+    this._email = options.email;
+    this._password = options.password;
+
+  }
+  /**
+   * Updates _accessToken
+   * @param token token to be updated
+   */
+  private _updateAccessToken(token: string) {
+    this._accessToken = token;
   }
 
   /**
@@ -72,6 +90,36 @@ export class Mercury {
         method,
         url,
         data: body,
+      });
+      return { ok: true, data };
+    } catch (error: unknown) {
+      return {
+        ok: false,
+        data: null,
+        error: (error as AxiosError)?.message ?? "Unknown error",
+      };
+    }
+  }
+
+  /**
+ * Generic method to make a graphql request.
+ * @param method HTTP method (GET, POST, PUT, DELETE).
+ * @param url Endpoint URL.
+ * @param body Request body.
+ * @returns ApiResponse with data or error information.
+ */
+  private async _graphqlRequest<T = any>(
+    method: "GET" | "POST" | "PUT" | "DELETE",
+    url?: string,
+    body?: Record<string, any>,
+    headers?: AxiosRequestHeaders
+  ): Promise<ApiResponse<T>> {
+    try {
+      const { data } = await this._graphqlInstance.request<T>({
+        method,
+        url,
+        data: body,
+        headers: headers as AxiosHeaders || this._graphqlInstance.defaults.headers, // Use provided headers or default headers
       });
       return { ok: true, data };
     } catch (error: unknown) {
@@ -136,4 +184,33 @@ export class Mercury {
     const body = this._createRequestBody(args);
     return this._backendRequest("POST", "/expiration", body);
   }
+
+  /**
+ * Updates access token.
+ * @returns Update access token result.
+ */
+  public async updateAccessToken() {
+    const mutation = `mutation MyMutation {
+      authenticate(input: {email: "${this._email}", password: "${this._password}"}) {
+        clientMutationId
+        jwtToken
+      }
+    }`;
+    const args = {
+      query: mutation
+    }
+    const headers = {
+      Authorization: undefined
+    }
+    const body = this._createRequestBody(args);
+    const res = await this._graphqlRequest<ApiResponse<GraphQLResponse>>("POST", "/graphql", body, headers as AxiosRequestHeaders);
+    if (res.ok && res.data && res.data.data) {
+      const authenticate = res.data.data.authenticate;
+      const {jwtToken} = authenticate;
+      this._updateAccessToken(jwtToken)
+    }
+    return res
+  }
+
+
 }

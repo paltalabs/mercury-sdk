@@ -26,3 +26,12 @@ export interface ApiResponse<T = any> {
   data: T | null;
   error?: string;
 }
+
+export interface AuthenticateResponse {
+  clientMutationId: string | null;
+  jwtToken: string
+}
+
+export interface GraphQLResponse {
+    authenticate: AuthenticateResponse;
+}
