@@ -7,9 +7,22 @@
   "author": "paltalabs",
   "license": "GNU",
   "private": false,
-  "keywords": ["mercury", "indexer", "stellar", "soroban"],
+  "keywords": [
+    "mercury",
+    "indexer",
+    "stellar",
+    "soroban"
+  ],
+  "scripts": {
+    "start:example": "npx ts-node src/example.ts"
+  },
   "dependencies": {
     "axios": "^1.6.2",
+    "dotenv": "^16.3.1",
     "typescript": "^5.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "ts-node": "^10.9.1"
   }
 }
