@@ -8,6 +8,9 @@ import {
   SubscribeToLedgerEntriesExpirationArgs,
 } from "./types";
 import { createAxiosInstance, toSnakeCase } from "./utils";
+import * as fs from 'fs';
+import * as path from 'path';
+
 interface MercuryOptions {
   backendEndpoint: string;
   accessToken: string;
@@ -206,11 +209,29 @@ export class Mercury {
     const res = await this._graphqlRequest<ApiResponse<GraphQLResponse>>("POST", "/graphql", body, headers as AxiosRequestHeaders);
     if (res.ok && res.data && res.data.data) {
       const authenticate = res.data.data.authenticate;
-      const {jwtToken} = authenticate;
+      const { jwtToken } = authenticate;
       this._updateAccessToken(jwtToken)
     }
     return res
   }
 
+  /**
+   * Retrieves sent payments.
+   * @returns The result of the getSentPayments GraphQL query.
+   */
+  public async getSentPayments() {
+    const queryFilePath = path.join(__dirname, './queries/getSentPayments.graphql');
+
+    // Read the query file
+    const query = fs.readFileSync(queryFilePath, 'utf8');
+    const args = {
+      query: query
+    }
+
+    const body = this._createRequestBody(args);
+    const res = await this._graphqlRequest<ApiResponse<GraphQLResponse>>("POST", "/graphql", body);
+    console.log(res)
+    return res
+  }
 
 }

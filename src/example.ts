@@ -24,5 +24,10 @@ dotenv.config();
   // });
 
   const res = await mercuryInstance.updateAccessToken()
+
+  // Here we will get payments
+
+  const resSentPayments = await mercuryInstance.getSentPayments()
+  
   console.log(res);
 })();
