@@ -1,3 +1,18 @@
+import { GraphQLClientRequestHeaders } from "graphql-request/build/esm/types";
+
+export interface GraphQLRequestArgs {
+  body: { request: string; variables?: any };
+  headers?: GraphQLClientRequestHeaders;
+  updateToken?: boolean;
+}
+
+export interface backendRequestArgs {
+  method: "GET" | "POST" | "PUT" | "DELETE";
+  url?: string;
+  body?: Record<string, any>;
+  updateToken?: boolean;
+}
+
 export interface SubscribeToContractEventsArgs {
   contractId: string;
   maxSingleSize?: number;
@@ -27,11 +42,23 @@ export interface ApiResponse<T = any> {
   error?: string;
 }
 
-export interface AuthenticateResponse {
+export interface GraphQLAuthenticateData {
   clientMutationId: string | null;
-  jwtToken: string
+  jwtToken: string;
 }
 
-export interface GraphQLResponse {
-    authenticate: AuthenticateResponse;
+export interface GraphQLAuthenticateResponse {
+  authenticate: GraphQLAuthenticateData;
+}
+
+export interface GraphQLGetReceivedPaymentsResponse {
+  paymentsToPublicKey: PaymentsData;
+}
+
+export interface GraphQLGetSentPaymentsResponse {
+  paymentsByPublicKey: PaymentsData;
+}
+
+export interface PaymentsData {
+  edges: any[];
 }
