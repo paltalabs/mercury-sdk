@@ -57,6 +57,34 @@ mercuryInstance.getReceivedPayments({
 })
 ```
 
+retrieve path payments strict send:
+```typescript
+mercuryInstance.getPathPaymentsStrictSend({
+    address:"someStellarAddress"
+})
+```
+
+retrieve path payments strict receive:
+```typescript
+mercuryInstance.getPathPaymentsStrictReceive({
+    address:"someStellarAddress"
+})
+```
+
+retrieve SDEX add liquidity:
+```typescript
+mercuryInstance.getAddLiquiditySDEX({
+    address:"someStellarAddress"
+})
+```
+retrieve SDEX remove liquidity:
+```typescript
+mercuryInstance.getRemoveLiquiditySDEX({
+    address:"someStellarAddress"
+})
+```
+
+
 ### Parse results
 
 Parse sent payments:
