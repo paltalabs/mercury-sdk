@@ -1,56 +1,61 @@
-import { AxiosError, AxiosHeaders, AxiosInstance, AxiosRequestHeaders } from "axios";
+import axios, { AxiosError } from "axios";
 import {
   ApiResponse,
-  GraphQLResponse,
+  GraphQLAuthenticateResponse,
+  GraphQLGetReceivedPaymentsResponse,
+  GraphQLGetSentPaymentsResponse,
+  GraphQLRequestArgs,
   SubscribeToContractEventsArgs,
   SubscribeToFullAccountArgs,
   SubscribeToLedgerEntriesArgs,
   SubscribeToLedgerEntriesExpirationArgs,
+  backendRequestArgs,
 } from "./types";
-import { createAxiosInstance, toSnakeCase } from "./utils";
+import { getMutationFromFile, getQueryFromFile, toSnakeCase } from "./utils";
+import { GraphQLClient } from "graphql-request";
+import { QUERIES_FILES, MUTATIONS_FILES } from "./graphql";
+
 interface MercuryOptions {
   backendEndpoint: string;
-  accessToken: string;
   graphqlEndpoint: string;
   defaultMaxSingleSize?: number;
-  email?: string;
-  password?: string;
+  email: string;
+  password: string;
+  updateTokenOnRequest?: boolean;
 }
 
 export class Mercury {
-  private readonly _backendInstance: AxiosInstance;
-  private readonly _graphqlInstance: AxiosInstance;
+  private readonly _backendEndpoint: string;
+  private readonly _graphqlClient: GraphQLClient;
   private readonly _defaultMaxSingleSize: number;
-  private _accessToken: string;
-  private _email: string | undefined;
-  private _password: string | undefined;
+  private readonly _email: string;
+  private readonly _password: string;
+  private _accessToken: string = "";
+  private _updateTokenOnRequest: boolean;
 
   /**
    * Constructs a Mercury instance with given configuration options.
    * @param options Configuration options for the Mercury instance.
    *  - backendEndpoint: URL of the backend endpoint.
    *  - graphqlEndpoint: URL of the graphql endpoint.
-   *  - accessToken: Your mercury access token.
    *  - email: Email associated with the Mercury account (optional).
    *  - password: Password for the Mercury account (optional).
    *  - defaultMaxSingleSize (optional): Default max single size for subscriptions.
    *  If not provided, the default value is 2000.
+   * - updateTokenOnRequest (optional): Whether to update the access token when calling a request or not.
+   *  If not provided, the default value is true. If you set this to false, you will have to manually call updateAccessToken() to generate/update the access token.
    */
   constructor(options: MercuryOptions) {
-    this._backendInstance = createAxiosInstance(
-      options.backendEndpoint,
-      options.accessToken
-    );
-    this._graphqlInstance = createAxiosInstance(
-      options.graphqlEndpoint,
-      options.accessToken
+    this._backendEndpoint = options.backendEndpoint;
+    this._graphqlClient = new GraphQLClient(
+      options.graphqlEndpoint + "/graphql"
     );
     this._defaultMaxSingleSize = options.defaultMaxSingleSize ?? 2000;
-    this._accessToken = options.accessToken;
     this._email = options.email;
     this._password = options.password;
-
+    this._updateTokenOnRequest = options.updateTokenOnRequest ?? true;
   }
+
   /**
    * Updates _accessToken
    * @param token token to be updated
@@ -60,7 +65,7 @@ export class Mercury {
   }
 
   /**
-   * Creates a request body by combining method arguments with default arguments.
+   * Usefull for creating request bodies in snake case for the mercury backend.
    * @param methodArgs Arguments specific to the method.
    * @param defaultArgs Default arguments to be combined.
    * @returns The combined arguments in snake case.
@@ -78,18 +83,26 @@ export class Mercury {
    * @param method HTTP method (GET, POST, PUT, DELETE).
    * @param url Endpoint URL.
    * @param body Request body.
+   * @param updateToken Whether to update the access token when calling the request or not.
    * @returns ApiResponse with data or error information.
    */
-  private async _backendRequest<T = any>(
-    method: "GET" | "POST" | "PUT" | "DELETE",
-    url?: string,
-    body?: Record<string, any>
-  ): Promise<ApiResponse<T>> {
+  private async _backendRequest<T = any>({
+    method,
+    body,
+    url,
+    updateToken = this._updateTokenOnRequest,
+  }: backendRequestArgs): Promise<ApiResponse<T>> {
     try {
-      const { data } = await this._backendInstance.request<T>({
+      if (updateToken) {
+        await this.updateAccessToken();
+      }
+      const { data } = await axios.request<T>({
         method,
-        url,
+        url: this._backendEndpoint + url,
         data: body,
+        headers: {
+          Authorization: `Bearer ${this._accessToken}`,
+        },
       });
       return { ok: true, data };
     } catch (error: unknown) {
@@ -102,25 +115,32 @@ export class Mercury {
   }
 
   /**
- * Generic method to make a graphql request.
- * @param method HTTP method (GET, POST, PUT, DELETE).
- * @param url Endpoint URL.
- * @param body Request body.
- * @returns ApiResponse with data or error information.
- */
-  private async _graphqlRequest<T = any>(
-    method: "GET" | "POST" | "PUT" | "DELETE",
-    url?: string,
-    body?: Record<string, any>,
-    headers?: AxiosRequestHeaders
-  ): Promise<ApiResponse<T>> {
+   * Generic method to make a graphql request.
+   * @param body Request body.
+   *  - request: GraphQL request.
+   *  - variables: GraphQL variables.
+   * @param updateToken Whether to update the access token when calling the request or not.
+   * @param headers Request headers.
+   * @returns ApiResponse with data or error information.
+   */
+  private async _graphqlRequest<T = any>({
+    body,
+    headers,
+    updateToken = this._updateTokenOnRequest,
+  }: GraphQLRequestArgs): Promise<ApiResponse<T>> {
     try {
-      const { data } = await this._graphqlInstance.request<T>({
-        method,
-        url,
-        data: body,
-        headers: headers as AxiosHeaders || this._graphqlInstance.defaults.headers, // Use provided headers or default headers
-      });
+      if (updateToken) {
+        await this.updateAccessToken();
+      }
+
+      const data = await this._graphqlClient.request<T>(
+        body.request,
+        body.variables,
+        headers ?? {
+          Authorization: `Bearer ${this._accessToken}`,
+        }
+      );
+
       return { ok: true, data };
     } catch (error: unknown) {
       return {
@@ -143,7 +163,7 @@ export class Mercury {
     const body = this._createRequestBody(args, {
       maxSingleSize: this._defaultMaxSingleSize,
     });
-    return this._backendRequest("POST", "/event", body);
+    return this._backendRequest({ method: "POST", url: "/event", body });
   }
 
   /**
@@ -154,7 +174,7 @@ export class Mercury {
    */
   public async subscribeToFullAccount(args: SubscribeToFullAccountArgs) {
     const body = this._createRequestBody(args);
-    return this._backendRequest("POST", "/account", body);
+    return this._backendRequest({ method: "POST", url: "/account", body });
   }
 
   /**
@@ -169,7 +189,7 @@ export class Mercury {
     const body = this._createRequestBody(args, {
       maxSingleSize: this._defaultMaxSingleSize,
     });
-    return this._backendRequest("POST", "/entry", body);
+    return this._backendRequest({ method: "POST", url: "/entry", body });
   }
 
   /**
@@ -182,35 +202,66 @@ export class Mercury {
     args: SubscribeToLedgerEntriesExpirationArgs
   ) {
     const body = this._createRequestBody(args);
-    return this._backendRequest("POST", "/expiration", body);
+    return this._backendRequest({ method: "POST", url: "/expiration", body });
   }
 
   /**
- * Updates access token.
- * @returns Update access token result.
- */
+   * Updates access token.
+   * @returns Update access token result.
+   */
   public async updateAccessToken() {
-    const mutation = `mutation MyMutation {
-      authenticate(input: {email: "${this._email}", password: "${this._password}"}) {
-        clientMutationId
-        jwtToken
-      }
-    }`;
-    const args = {
-      query: mutation
+    const mutation = getMutationFromFile(MUTATIONS_FILES.AUTHENTICATE);
+
+    const res = await this._graphqlRequest<GraphQLAuthenticateResponse>({
+      body: {
+        request: mutation,
+        variables: {
+          email: this._email,
+          password: this._password,
+        },
+      },
+      headers: {},
+      updateToken: false,
+    });
+
+    if (res.ok && res.data?.authenticate?.jwtToken) {
+      this._updateAccessToken(res.data.authenticate.jwtToken);
     }
-    const headers = {
-      Authorization: undefined
-    }
-    const body = this._createRequestBody(args);
-    const res = await this._graphqlRequest<ApiResponse<GraphQLResponse>>("POST", "/graphql", body, headers as AxiosRequestHeaders);
-    if (res.ok && res.data && res.data.data) {
-      const authenticate = res.data.data.authenticate;
-      const {jwtToken} = authenticate;
-      this._updateAccessToken(jwtToken)
-    }
-    return res
+
+    return res;
   }
 
+  /**
+   * Retrieves sent payments.
+   * @param args Arguments for the query:
+   *  - publicKey: Public key of the account to retrieve sent payments from.
+   * @returns The result of the getSentPayments GraphQL query.
+   */
+  public async getSentPayments(args: { publicKey: string }) {
+    const query = getQueryFromFile(QUERIES_FILES.GET_SENT_PAYMENTS);
 
+    return this._graphqlRequest<GraphQLGetSentPaymentsResponse>({
+      body: {
+        request: query,
+        variables: args,
+      },
+    });
+  }
+
+  /**
+   * Retrieves sent payments.
+   * @param args Arguments for the query:
+   * - publicKey: Public key of the account to retrieve received payments from.
+   * @returns The result of the getReceivedPayments GraphQL query.
+   */
+  public async getReceivedPayments(args: { publicKey: string }) {
+    const query = getQueryFromFile(QUERIES_FILES.GET_RECEIVED_PAYMENTS);
+
+    return this._graphqlRequest<GraphQLGetReceivedPaymentsResponse>({
+      body: {
+        request: query,
+        variables: args,
+      },
+    });
+  }
 }

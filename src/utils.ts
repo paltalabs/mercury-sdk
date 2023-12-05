@@ -1,14 +1,5 @@
-import axios from "axios";
-
-export const createAxiosInstance = (url: string, token: string) => {
-  return axios.create({
-    baseURL: url,
-    headers: {
-      Authorization: `Bearer ${token} `,
-    },
-  });
-};
-
+import path from "path";
+import * as fs from "fs";
 export const toSnakeCase = <T extends Record<string, any>>(
   obj: T
 ): Record<string, any> => {
@@ -18,4 +9,19 @@ export const toSnakeCase = <T extends Record<string, any>>(
       return [snakeKey, value];
     })
   );
+};
+
+export const getMutationFromFile = (name: string) => {
+  const mutationPath = path.join(
+    __dirname,
+    `./graphql/mutations/${name}.graphql`
+  );
+  const mutation = fs.readFileSync(mutationPath, "utf8");
+  return mutation;
+};
+
+export const getQueryFromFile = (name: string) => {
+  const queryPath = path.join(__dirname, `./graphql/queries/${name}.graphql`);
+  const query = fs.readFileSync(queryPath, "utf8");
+  return query;
 };
