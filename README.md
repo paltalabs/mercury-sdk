@@ -73,13 +73,13 @@ mercuryInstance.getPathPaymentsStrictReceive({
 
 retrieve SDEX add liquidity:
 ```typescript
-mercuryInstance.getAddLiquiditySDEX({
+mercuryInstance.getLiquidityPoolDeposit({
     address:"someStellarAddress"
 })
 ```
 retrieve SDEX remove liquidity:
 ```typescript
-mercuryInstance.getRemoveLiquiditySDEX({
+mercuryInstance.getLiquidityPoolWithdraw({
     address:"someStellarAddress"
 })
 ```
