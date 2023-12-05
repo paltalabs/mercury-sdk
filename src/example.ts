@@ -24,12 +24,12 @@ dotenv.config();
   });
 
   const res2 = await mercuryInstance.getSentPayments({
-    publicKey: "GDKXVNZXCJERWN7FSBOUPE5HKQ62LKYVZZYI4PMZHFVN6IWOFVRVI6LH",
+    publicKey: "GCHR5WWPDFF3U3HP2NA6TI6FCQPYEWS3UOPIPJKZLAAFM57CEG4ZYBWP",
   });
 
   const res3 = await mercuryInstance.getReceivedPayments({
-    publicKey: "GDKXVNZXCJERWN7FSBOUPE5HKQ62LKYVZZYI4PMZHFVN6IWOFVRVI6LH",
+    publicKey: "GCHR5WWPDFF3U3HP2NA6TI6FCQPYEWS3UOPIPJKZLAAFM57CEG4ZYBWP",
   });
 
-  console.log({ res, res2, res3 });
+  console.log(JSON.stringify({ res, res2, res3 }));
 })();
