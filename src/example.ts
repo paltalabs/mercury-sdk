@@ -19,17 +19,33 @@ dotenv.config();
     password: process.env.MERCURY_TESTER_PASSWORD!,
   });
 
-  const res = await mercuryInstance.subscribeToContractEvents({
-    contractId: "GDKXVNZXCJERWN7FSBOUPE5HKQ62LKYVZZYI4PMZHFVN6IWOFVRVI6LH",
+  // const res = await mercuryInstance.subscribeToContractEvents({
+  //   contractId: "GDKXVNZXCJERWN7FSBOUPE5HKQ62LKYVZZYI4PMZHFVN6IWOFVRVI6LH",
+  // });
+
+  // const res2 = await mercuryInstance.getSentPayments({
+  //   publicKey: "GCHR5WWPDFF3U3HP2NA6TI6FCQPYEWS3UOPIPJKZLAAFM57CEG4ZYBWP",
+  // });
+
+  // const res3 = await mercuryInstance.getReceivedPayments({
+  //   publicKey: "GCHR5WWPDFF3U3HP2NA6TI6FCQPYEWS3UOPIPJKZLAAFM57CEG4ZYBWP",
+  // });
+
+  const res4 = await mercuryInstance.getPathPaymentsStrictSend({
+    publicKey: "GBXRF7BXKPNQIIWAAO6Y6CFIUXX6GCVLILANFPSENPKAFFZA4KOVCLMB",
   });
 
-  const res2 = await mercuryInstance.getSentPayments({
-    publicKey: "GCHR5WWPDFF3U3HP2NA6TI6FCQPYEWS3UOPIPJKZLAAFM57CEG4ZYBWP",
+  // const res5 = await mercuryInstance.getPathPaymentsStrictReceive({
+  //   publicKey: "GBXRF7BXKPNQIIWAAO6Y6CFIUXX6GCVLILANFPSENPKAFFZA4KOVCLMB",
+  // });
+
+  const res6 = await mercuryInstance.getLiquidityPoolWithdraw({
+    publicKey: "GBXRF7BXKPNQIIWAAO6Y6CFIUXX6GCVLILANFPSENPKAFFZA4KOVCLMB",
   });
 
-  const res3 = await mercuryInstance.getReceivedPayments({
-    publicKey: "GCHR5WWPDFF3U3HP2NA6TI6FCQPYEWS3UOPIPJKZLAAFM57CEG4ZYBWP",
+  const res7 = await mercuryInstance.getLiquidityPoolDeposit({
+    publicKey: "GBXRF7BXKPNQIIWAAO6Y6CFIUXX6GCVLILANFPSENPKAFFZA4KOVCLMB",
   });
 
-  console.log(JSON.stringify({ res, res2, res3 }));
+  console.log(JSON.stringify({ res4, res6, res7 }));
 })();

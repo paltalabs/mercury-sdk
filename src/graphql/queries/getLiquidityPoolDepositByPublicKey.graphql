@@ -1,0 +1,18 @@
+query MyQuery($publicKey: String!) {
+  liquidityPoolDepositByPublicKey(publicKeyText: $publicKey) {
+    edges {
+      node {
+        source
+        sourceMuxed
+        poolId
+        maxAmountA
+        maxAmountB
+        minPriceN
+        minPriceD
+        maxPriceN
+        maxPriceD
+        ledger
+      }
+    }
+  }
+}

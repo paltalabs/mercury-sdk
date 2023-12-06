@@ -1,19 +1,23 @@
 import axios, { AxiosError } from "axios";
-import {
-  ApiResponse,
-  GraphQLAuthenticateResponse,
-  GraphQLGetReceivedPaymentsResponse,
-  GraphQLGetSentPaymentsResponse,
-  GraphQLRequestArgs,
-  SubscribeToContractEventsArgs,
-  SubscribeToFullAccountArgs,
-  SubscribeToLedgerEntriesArgs,
-  SubscribeToLedgerEntriesExpirationArgs,
-  backendRequestArgs,
-} from "./types";
+
 import { getMutationFromFile, getQueryFromFile, toSnakeCase } from "./utils";
 import { GraphQLClient } from "graphql-request";
 import { QUERIES_FILES, MUTATIONS_FILES } from "./graphql";
+import {
+  ApiResponse,
+  backendRequestArgs,
+  AuthenticateResponse,
+  GetPathPaymentsStrictSendByPublicKeyResponse,
+  GetPathPaymentsStrictReceiveByPublicKeyResponse,
+  GetReceivedPaymentsResponse,
+  GetSentPaymentsResponse,
+  LiquidityPoolDepositByPublicKeyResponse,
+  GraphQLRequestArgs,
+  SubscribeToFullAccountArgs,
+  SubscribeToLedgerEntriesArgs,
+  SubscribeToLedgerEntriesExpirationArgs,
+} from "./types";
+import { SubscribeToContractEventsArgs } from "./types/subscriptions";
 
 interface MercuryOptions {
   backendEndpoint: string;
@@ -30,8 +34,8 @@ export class Mercury {
   private readonly _defaultMaxSingleSize: number;
   private readonly _email: string;
   private readonly _password: string;
+  private readonly _updateTokenOnRequest: boolean;
   private _accessToken: string = "";
-  private _updateTokenOnRequest: boolean;
 
   /**
    * Constructs a Mercury instance with given configuration options.
@@ -212,7 +216,7 @@ export class Mercury {
   public async updateAccessToken() {
     const mutation = getMutationFromFile(MUTATIONS_FILES.AUTHENTICATE);
 
-    const res = await this._graphqlRequest<GraphQLAuthenticateResponse>({
+    const res = await this._graphqlRequest<AuthenticateResponse>({
       body: {
         request: mutation,
         variables: {
@@ -240,7 +244,7 @@ export class Mercury {
   public async getSentPayments(args: { publicKey: string }) {
     const query = getQueryFromFile(QUERIES_FILES.GET_SENT_PAYMENTS);
 
-    return this._graphqlRequest<GraphQLGetSentPaymentsResponse>({
+    return this._graphqlRequest<GetSentPaymentsResponse>({
       body: {
         request: query,
         variables: args,
@@ -249,15 +253,91 @@ export class Mercury {
   }
 
   /**
-   * Retrieves sent payments.
+   * Retrieves received payments.
    * @param args Arguments for the query:
    * - publicKey: Public key of the account to retrieve received payments from.
-   * @returns The result of the getReceivedPayments GraphQL query.
+   * @returns Received payments of given public key.
    */
   public async getReceivedPayments(args: { publicKey: string }) {
     const query = getQueryFromFile(QUERIES_FILES.GET_RECEIVED_PAYMENTS);
 
-    return this._graphqlRequest<GraphQLGetReceivedPaymentsResponse>({
+    return this._graphqlRequest<GetReceivedPaymentsResponse>({
+      body: {
+        request: query,
+        variables: args,
+      },
+    });
+  }
+
+  /**
+   * @param args Arguments for the query:
+   * - publicKey: Public key of the account to retrieve path payments strict send from.
+   * @returns Path payments strict send by public key.
+   */
+  public async getPathPaymentsStrictSend(args: { publicKey: string }) {
+    const query = getQueryFromFile(
+      QUERIES_FILES.GET_PATH_PAYMENTS_STRICT_SEND_BY_PUBLIC_KEY
+    );
+
+    return this._graphqlRequest<GetPathPaymentsStrictReceiveByPublicKeyResponse>(
+      {
+        body: {
+          request: query,
+          variables: args,
+        },
+      }
+    );
+  }
+
+  /**
+   * @param args Arguments for the query:
+   * - publicKey: Public key of the account to retrieve path payments strict receive from.
+   * @returns Path payments strict receive by public key.
+   */
+  public async getPathPaymentsStrictReceive(args: { publicKey: string }) {
+    const query = getQueryFromFile(
+      QUERIES_FILES.GET_PATH_PAYMENTS_STRICT_RECEIVE_BY_PUBLIC_KEY
+    );
+
+    return this._graphqlRequest<GetPathPaymentsStrictSendByPublicKeyResponse>({
+      body: {
+        request: query,
+        variables: args,
+      },
+    });
+  }
+
+  /**
+   * @param args Arguments for the query:
+   * - publicKey: Public key of the account to retrieve liquidity pool withdraw from.
+   * @returns Liquidity pool withdraw by public key.
+   */
+  public async getLiquidityPoolWithdraw(args: { publicKey: string }) {
+    const query = getQueryFromFile(
+      QUERIES_FILES.GET_LIQUIDITY_POOL_WITHDRAW_BY_PUBLIC_KEY
+    );
+
+    //TODO: Type the response
+
+    return this._graphqlRequest({
+      body: {
+        request: query,
+        variables: args,
+      },
+    });
+  }
+
+  /**
+   * @param args Arguments for the query:
+   * - publicKey: Public key of the account to retrieve liquidity pool deposit from.
+   * @returns Liquidity pool deposit by public key.
+   */
+  public async getLiquidityPoolDeposit(args: { publicKey: string }) {
+    const query = getQueryFromFile(
+      QUERIES_FILES.GET_LIQUIDITY_POOL_DEPOSIT_BY_PUBLIC_KEY
+    );
+
+    return this._graphqlRequest<LiquidityPoolDepositByPublicKeyResponse>({
       body: {
         request: query,
         variables: args,

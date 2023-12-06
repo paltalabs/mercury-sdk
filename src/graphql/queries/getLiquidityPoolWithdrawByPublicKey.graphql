@@ -1,0 +1,15 @@
+query MyQuery($publicKey: String!) {
+  liquidityPoolWithdrawByPublicKey(publicKeyText: $publicKey) {
+    edges {
+      node {
+        source
+        sourceMuxed
+        poolId
+        amount
+        minAmountA
+        minAmountB
+        ledger
+      }
+    }
+  }
+}
