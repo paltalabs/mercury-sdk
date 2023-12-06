@@ -1,10 +1,13 @@
 {
   "name": "mercury-sdk",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "handles subscriptions, data retrieval and processing of mercury indexer",
   "main": "dist/index.js",
   "repository": "https://github.com/paltalabs/mercury-sdk",
   "author": "paltalabs",
+  "files": [
+    "dist/**/*"
+  ],
   "license": "GNU",
   "private": false,
   "keywords": [

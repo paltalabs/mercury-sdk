@@ -8,10 +8,12 @@ Create an instance of mercury:
 import {Mercury} from "mercury-sdk";
 
 const mercuryInstance = new Mercury({
-    authToken: process.env.MERCURY_ACCESS_TOKEN,
-    email: process.env.MERCURY_TESTER_EMAIL,
-    password: process.env.MERCURY_TESTER_PASSWORD
+    backendEndpoint: process.env.MERCURY_BACKEND_ENDPOINT ,
+    graphqlEndpoint: process.env.MERCURY_GRAPHQL_ENDPOINT ,
+    email: process.env.MERCURY_TESTER_EMAIL ,
+    password: process.env.MERCURY_TESTER_PASSWORD 
 })
+
 ```
 
 ### Subscriptions
