@@ -1,5 +1,10 @@
 import path from "path";
 import * as fs from "fs";
+import { sentPaymentsQuery } from './graphql/queries/sentPaymentsQuery';
+import { receivedPaymentsQuery } from './graphql/queries/receivedPaymentsQuery';
+import { authenticateMutation } from "./graphql/mutations/authenticateMutation";
+import { MUTATIONS_FILES } from "./graphql";
+import { QUERIES_FILES } from "./graphql";
 export const toSnakeCase = <T extends Record<string, any>>(
   obj: T
 ): Record<string, any> => {
@@ -12,16 +17,23 @@ export const toSnakeCase = <T extends Record<string, any>>(
 };
 
 export const getMutationFromFile = (name: string) => {
-  const mutationPath = path.join(
-    __dirname,
-    `./graphql/mutations/${name}.graphql`
-  );
-  const mutation = fs.readFileSync(mutationPath, "utf8");
-  return mutation;
+  switch (name) {
+    case MUTATIONS_FILES.AUTHENTICATE:
+      return authenticateMutation;
+    default:
+      // Handle other cases or throw an error
+      throw new Error(`Mutation not found: ${name}`);
+  }
 };
 
 export const getQueryFromFile = (name: string) => {
-  const queryPath = path.join(__dirname, `./graphql/queries/${name}.graphql`);
-  const query = fs.readFileSync(queryPath, "utf8");
-  return query;
+  switch (name) {
+    case QUERIES_FILES.GET_RECEIVED_PAYMENTS:
+      return receivedPaymentsQuery;
+    case QUERIES_FILES.GET_SENT_PAYMENTS:
+      return sentPaymentsQuery;
+    default:
+      // Handle other cases or throw an error
+      throw new Error(`Query not found: ${name}`);
+  }
 };

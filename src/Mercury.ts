@@ -132,7 +132,6 @@ export class Mercury {
       if (updateToken) {
         await this.updateAccessToken();
       }
-
       const data = await this._graphqlClient.request<T>(
         body.request,
         body.variables,
@@ -211,7 +210,6 @@ export class Mercury {
    */
   public async updateAccessToken() {
     const mutation = getMutationFromFile(MUTATIONS_FILES.AUTHENTICATE);
-
     const res = await this._graphqlRequest<GraphQLAuthenticateResponse>({
       body: {
         request: mutation,
@@ -239,7 +237,6 @@ export class Mercury {
    */
   public async getSentPayments(args: { publicKey: string }) {
     const query = getQueryFromFile(QUERIES_FILES.GET_SENT_PAYMENTS);
-
     return this._graphqlRequest<GraphQLGetSentPaymentsResponse>({
       body: {
         request: query,

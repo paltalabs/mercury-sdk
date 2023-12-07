@@ -15,6 +15,7 @@ const mercuryInstance = new Mercury({
 })
 
 ```
+endpoints should be without "/" and without /graphql or any other path. It should be only domain:port.
 
 ### Subscriptions
 Subscribe to an event:
@@ -48,14 +49,14 @@ mercuryInstance.getFullAccountSubscriptions({
 retrieve sent payments:
 ```typescript
 mercuryInstance.getSentPayments({
-    address:"someStellarAddress"
+    publicKey:"someStellarAddress"
 })
 ```
 
 retrieve received payments:
 ```typescript
 mercuryInstance.getReceivedPayments({
-    address:"someStellarAddress"
+    publicKey:"someStellarAddress"
 })
 ```
 
