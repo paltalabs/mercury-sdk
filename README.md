@@ -63,27 +63,27 @@ mercuryInstance.getReceivedPayments({
 retrieve path payments strict send:
 ```typescript
 mercuryInstance.getPathPaymentsStrictSend({
-    address:"someStellarAddress"
+    publicKey:"someStellarAddress"
 })
 ```
 
 retrieve path payments strict receive:
 ```typescript
 mercuryInstance.getPathPaymentsStrictReceive({
-    address:"someStellarAddress"
+    publicKey:"someStellarAddress"
 })
 ```
 
 retrieve SDEX add liquidity:
 ```typescript
 mercuryInstance.getLiquidityPoolDeposit({
-    address:"someStellarAddress"
+    publicKey:"someStellarAddress"
 })
 ```
 retrieve SDEX remove liquidity:
 ```typescript
 mercuryInstance.getLiquidityPoolWithdraw({
-    address:"someStellarAddress"
+    publicKey:"someStellarAddress"
 })
 ```
 
