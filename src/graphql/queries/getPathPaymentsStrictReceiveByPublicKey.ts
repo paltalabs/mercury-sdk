@@ -18,23 +18,23 @@ export const GET_PATH_PAYMENTS_STRICT_RECEIVE_BY_PUBLIC_KEY = gql`
           code
           issuer
         }
-        assetByPath1 {
+        assetByPath1Asset {
           code
           issuer
         }
-        assetByPath2 {
+        assetByPath2Asset {
           code
           issuer
         }
-        assetByPath3 {
+        assetByPath3Asset {
           issuer
           code
         }
-        assetByPath4 {
+        assetByPath4Asset {
           issuer
           code
         }
-        assetByPath5 {
+        assetByPath5Asset {
           issuer
           code
         }
@@ -43,11 +43,11 @@ export const GET_PATH_PAYMENTS_STRICT_RECEIVE_BY_PUBLIC_KEY = gql`
           issuer
         }
         destAssetNative
-        path1Native
-        path2Native
-        path3Native
-        path4Native
-        path5Native
+        path1AssetNative
+        path2AssetNative
+        path3AssetNative
+        path4AssetNative
+        path5AssetNative
         sendAssetNative
         destAmount
         sendMax
