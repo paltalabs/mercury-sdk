@@ -1,6 +1,6 @@
 {
   "name": "mercury-sdk",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "handles subscriptions, data retrieval and processing of mercury indexer",
   "main": "dist/index.js",
   "repository": "https://github.com/paltalabs/mercury-sdk",
@@ -17,7 +17,7 @@
     "soroban"
   ],
   "scripts": {
-    "build": "tsc && cpy './src/**/*.graphql' './dist/' --cwd=src --parents",
+    "build": "tsc",
     "start:example": "npx ts-node src/example.ts"
   },
   "dependencies": {
