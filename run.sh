@@ -28,7 +28,6 @@ docker run --volume ${currentDir}/:/workspace \
            --volume ${currentDir}/../../paltalabs/mercury-sdk:/linked_sdk \
            --name ${containerName} \
            --interactive \
-           --publish 3001:3000 \
            --workdir="/workspace" \
            --env-file .env \
            --tty \
