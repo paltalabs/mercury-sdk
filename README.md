@@ -101,6 +101,20 @@ async function someFunction() {
     console.log("parsedData:", parsedData)
 }
 ```
+The output:
+```json
+[
+    {
+        "from": "address1", 
+        "to": "address2", 
+        "asset": {
+            "asset_type": "",
+            "isuer":""
+            },
+        "amount":"1000",
+]
+```
+
 
 ## Local development
 Use `yarn`
