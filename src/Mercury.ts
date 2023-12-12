@@ -177,8 +177,13 @@ export class Mercury {
    * @returns Subscription result.
    */
   public async subscribeToFullAccount(args: SubscribeToFullAccountArgs) {
-    const body = this._createRequestBody(args);
-    return this._backendRequest({ method: "POST", url: "/account", body });
+    const publickey = args.publicKey;
+
+    return this._backendRequest({
+      method: "POST",
+      url: "/account",
+      body: { publickey },
+    });
   }
 
   /**
