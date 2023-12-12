@@ -76,4 +76,73 @@ dotenv.config();
   console.log({ parsedPathPaymentsStrictReceive });
   console.log({ parsedLiquidityPoolWithdraw });
   console.log({ parsedLiquidityPoolDeposit });
+
+  //Sent payments
+  const sentPaymentsResponse = await mercuryInstance.getSentPayments({
+    publicKey: "someStellarAddress",
+  });
+  if (sentPaymentsResponse.ok) {
+    const sentPaymentsParsedData = getSentPaymentsParser(
+      sentPaymentsResponse.data!
+    );
+  }
+
+  //Received payments
+  const receivedPaymentsResponse = await mercuryInstance.getReceivedPayments({
+    publicKey: "someStellarAddress",
+  });
+  if (receivedPaymentsResponse.ok) {
+    const receivedPaymentsParsedData = getReceivedPaymentsParser(
+      receivedPaymentsResponse.data!
+    );
+  }
+
+  //Path Payments Strict Send
+  const pathPaymentsStrictSendResponse =
+    await mercuryInstance.getPathPaymentsStrictSend({
+      publicKey: "someStellarAddress",
+    });
+
+  if (pathPaymentsStrictSendResponse.ok) {
+    const pathPaymentsStrictSendParsedData = getPathPaymentsStrictSendParser(
+      pathPaymentsStrictSendResponse.data!
+    );
+  }
+
+  //Path Payments Strict Receive
+  const pathPaymentsStrictReceiveResponse =
+    await mercuryInstance.getPathPaymentsStrictReceive({
+      publicKey: "someStellarAddress",
+    });
+
+  if (pathPaymentsStrictReceiveResponse.ok) {
+    const pathPaymentsStrictReceiveParsedData =
+      getPathPaymentsStrictReceiveParser(
+        pathPaymentsStrictReceiveResponse.data!
+      );
+  }
+
+  //Liquidity Pool Withdraw
+  const liquidityPoolWithdrawResponse =
+    await mercuryInstance.getLiquidityPoolWithdraw({
+      publicKey: "someStellarAddress",
+    });
+
+  if (liquidityPoolWithdrawResponse.ok) {
+    const liquidityPoolWithdrawParsedData = getLiquidityPoolWithdrawParser(
+      liquidityPoolWithdrawResponse.data!
+    );
+  }
+
+  //Liquidity Pool Deposit
+  const liquidityPoolDepositResponse =
+    await mercuryInstance.getLiquidityPoolDeposit({
+      publicKey: "someStellarAddress",
+    });
+
+  if (liquidityPoolDepositResponse.ok) {
+    const liquidityPoolDepositParsedData = getLiquidityPoolDepositParser(
+      liquidityPoolDepositResponse.data!
+    );
+  }
 })();

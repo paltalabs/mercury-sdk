@@ -173,7 +173,7 @@ export class Mercury {
   /**
    * Subscribes to the full account details.
    * @param args Arguments for the subscription:
-   *   - address: Public key of the account to subscribe to.
+   *   - publicKey: Public key of the account to subscribe to.
    * @returns Subscription result.
    */
   public async subscribeToFullAccount(args: SubscribeToFullAccountArgs) {
