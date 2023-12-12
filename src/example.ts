@@ -1,5 +1,15 @@
 import { Mercury } from "./Mercury";
 import dotenv from "dotenv";
+
+import {
+  getSentPaymentsParser,
+  getReceivedPaymentsParser,
+  getPathPaymentsStrictSendParser,
+  getPathPaymentsStrictReceiveParser,
+  getLiquidityPoolWithdrawParser,
+  getLiquidityPoolDepositParser,
+} from "./utils/parsers";
+
 dotenv.config();
 
 (async function () {
@@ -23,21 +33,21 @@ dotenv.config();
   //   contractId: "GDKXVNZXCJERWN7FSBOUPE5HKQ62LKYVZZYI4PMZHFVN6IWOFVRVI6LH",
   // });
 
-  // const res2 = await mercuryInstance.getSentPayments({
-  //   publicKey: "GCHR5WWPDFF3U3HP2NA6TI6FCQPYEWS3UOPIPJKZLAAFM57CEG4ZYBWP",
-  // });
+  const res2 = await mercuryInstance.getSentPayments({
+    publicKey: "GCHR5WWPDFF3U3HP2NA6TI6FCQPYEWS3UOPIPJKZLAAFM57CEG4ZYBWP",
+  });
 
-  // const res3 = await mercuryInstance.getReceivedPayments({
-  //   publicKey: "GCHR5WWPDFF3U3HP2NA6TI6FCQPYEWS3UOPIPJKZLAAFM57CEG4ZYBWP",
-  // });
+  const res3 = await mercuryInstance.getReceivedPayments({
+    publicKey: "GCHR5WWPDFF3U3HP2NA6TI6FCQPYEWS3UOPIPJKZLAAFM57CEG4ZYBWP",
+  });
 
   const res4 = await mercuryInstance.getPathPaymentsStrictSend({
     publicKey: "GBXRF7BXKPNQIIWAAO6Y6CFIUXX6GCVLILANFPSENPKAFFZA4KOVCLMB",
   });
 
-  // const res5 = await mercuryInstance.getPathPaymentsStrictReceive({
-  //   publicKey: "GBXRF7BXKPNQIIWAAO6Y6CFIUXX6GCVLILANFPSENPKAFFZA4KOVCLMB",
-  // });
+  const res5 = await mercuryInstance.getPathPaymentsStrictReceive({
+    publicKey: "GBXRF7BXKPNQIIWAAO6Y6CFIUXX6GCVLILANFPSENPKAFFZA4KOVCLMB",
+  });
 
   const res6 = await mercuryInstance.getLiquidityPoolWithdraw({
     publicKey: "GBXRF7BXKPNQIIWAAO6Y6CFIUXX6GCVLILANFPSENPKAFFZA4KOVCLMB",
@@ -47,5 +57,23 @@ dotenv.config();
     publicKey: "GBXRF7BXKPNQIIWAAO6Y6CFIUXX6GCVLILANFPSENPKAFFZA4KOVCLMB",
   });
 
-  console.log(JSON.stringify({ res4, res6, res7 }));
+  const parsedSentPayments = getSentPaymentsParser(res2.data!);
+  const parsedReceivedPayments = getReceivedPaymentsParser(res3.data!);
+  const parsedPathPaymentsStrictSend = getPathPaymentsStrictSendParser(
+    res4.data!
+  );
+  const parsedPathPaymentsStrictReceive = getPathPaymentsStrictReceiveParser(
+    res5.data!
+  );
+  const parsedLiquidityPoolWithdraw = getLiquidityPoolWithdrawParser(
+    res6.data!
+  );
+  const parsedLiquidityPoolDeposit = getLiquidityPoolDepositParser(res7.data!);
+
+  console.log({ parsedSentPayments });
+  console.log({ parsedReceivedPayments });
+  console.log({ parsedPathPaymentsStrictSend });
+  console.log({ parsedPathPaymentsStrictReceive });
+  console.log({ parsedLiquidityPoolWithdraw });
+  console.log({ parsedLiquidityPoolDeposit });
 })();

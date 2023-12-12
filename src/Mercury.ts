@@ -13,11 +13,11 @@ import {
   SubscribeToFullAccountArgs,
   SubscribeToLedgerEntriesArgs,
   SubscribeToLedgerEntriesExpirationArgs,
+  LiquidityPoolWithdrawByPublicKeyResponse,
 } from "./types";
 import { SubscribeToContractEventsArgs } from "./types/subscriptions";
 import { toSnakeCase } from "./utils";
-import * as MUTATIONS from "./graphql/mutations";
-import * as QUERIES from "./graphql/queries";
+import { MUTATIONS, QUERIES } from "./graphql";
 
 interface MercuryOptions {
   backendEndpoint: string;
@@ -269,14 +269,12 @@ export class Mercury {
    * @returns Path payments strict send by public key.
    */
   public async getPathPaymentsStrictSend(args: { publicKey: string }) {
-    return this._graphqlRequest<GetPathPaymentsStrictReceiveByPublicKeyResponse>(
-      {
-        body: {
-          request: QUERIES.GET_PATH_PAYMENTS_STRICT_SEND_BY_PUBLIC_KEY,
-          variables: args,
-        },
-      }
-    );
+    return this._graphqlRequest<GetPathPaymentsStrictSendByPublicKeyResponse>({
+      body: {
+        request: QUERIES.GET_PATH_PAYMENTS_STRICT_SEND_BY_PUBLIC_KEY,
+        variables: args,
+      },
+    });
   }
 
   /**
@@ -285,12 +283,14 @@ export class Mercury {
    * @returns Path payments strict receive by public key.
    */
   public async getPathPaymentsStrictReceive(args: { publicKey: string }) {
-    return this._graphqlRequest<GetPathPaymentsStrictSendByPublicKeyResponse>({
-      body: {
-        request: QUERIES.GET_PATH_PAYMENTS_STRICT_RECEIVE_BY_PUBLIC_KEY,
-        variables: args,
-      },
-    });
+    return this._graphqlRequest<GetPathPaymentsStrictReceiveByPublicKeyResponse>(
+      {
+        body: {
+          request: QUERIES.GET_PATH_PAYMENTS_STRICT_RECEIVE_BY_PUBLIC_KEY,
+          variables: args,
+        },
+      }
+    );
   }
 
   /**
@@ -301,7 +301,7 @@ export class Mercury {
   public async getLiquidityPoolWithdraw(args: { publicKey: string }) {
     //TODO: Type the response
 
-    return this._graphqlRequest({
+    return this._graphqlRequest<LiquidityPoolWithdrawByPublicKeyResponse>({
       body: {
         request: QUERIES.GET_LIQUIDITY_POOL_WITHDRAW_BY_PUBLIC_KEY,
         variables: args,

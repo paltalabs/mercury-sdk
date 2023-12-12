@@ -14,4 +14,7 @@ export {
   GetReceivedPaymentsResponse,
   GetSentPaymentsResponse,
 } from "./payments";
-export { LiquidityPoolDepositByPublicKeyResponse } from "./liquidityPool";
+export {
+  LiquidityPoolDepositByPublicKeyResponse,
+  LiquidityPoolWithdrawByPublicKeyResponse,
+} from "./liquidityPool";
