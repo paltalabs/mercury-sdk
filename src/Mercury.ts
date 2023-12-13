@@ -14,7 +14,9 @@ import {
   SubscribeToLedgerEntriesArgs,
   SubscribeToLedgerEntriesExpirationArgs,
   LiquidityPoolWithdrawByPublicKeyResponse,
-  GetContractSubscriptionsResponse,
+  GetContractEventsResponse,
+  GetAllContractEventSubscriptionsResponse,
+  GetAllFullAccountSubscriptionsResponse,
 } from "./types";
 import { SubscribeToContractEventsArgs } from "./types/subscriptions";
 import { toSnakeCase } from "./utils";
@@ -330,14 +332,36 @@ export class Mercury {
   }
 
   /**
+   * @returns All contracts event subscriptions.
+   */
+  public async getAllContractEventSubscriptions() {
+    return this._graphqlRequest<GetAllContractEventSubscriptionsResponse>({
+      body: {
+        request: QUERIES.GET_ALL_CONTRACT_EVENT_SUBSCRIPTIONS,
+      },
+    });
+  }
+
+  /**
+   * @returns All full account subscriptions.
+   */
+  public async getAllFullAccountSubscriptions() {
+    return this._graphqlRequest<GetAllFullAccountSubscriptionsResponse>({
+      body: {
+        request: QUERIES.GET_ALL_FULL_ACCOUNT_SUBSCRIPTIONS,
+      },
+    });
+  }
+
+  /**
    * @param args Arguments for the query:
    * - contractId: Contract ID to retrieve subscriptions from.
    * @returns Events the contract is subscribed to.
    */
-  public async getContractSubscriptions(args: { contractId: string }) {
-    return this._graphqlRequest<GetContractSubscriptionsResponse>({
+  public async getContractEvents(args: { contractId: string }) {
+    return this._graphqlRequest<GetContractEventsResponse>({
       body: {
-        request: QUERIES.GET_CONTRACT_SUBSCRIPTIONS,
+        request: QUERIES.GET_CONTRACT_EVENTS,
         variables: args,
       },
     });

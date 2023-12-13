@@ -18,4 +18,6 @@ export {
   LiquidityPoolDepositByPublicKeyResponse,
   LiquidityPoolWithdrawByPublicKeyResponse,
 } from "./liquidityPool";
-export { GetContractSubscriptionsResponse } from "./getContractSubscriptions";
+export { GetContractEventsResponse } from "./getContractEvents";
+export { GetAllContractEventSubscriptionsResponse } from "./getAllContractEventSubscriptions";
+export { GetAllFullAccountSubscriptionsResponse } from "./getAllFullAccountSubscriptions";

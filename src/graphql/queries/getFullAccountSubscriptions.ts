@@ -1,6 +1,6 @@
 import { gql } from "graphql-request";
 
-export const GET_CONTRACT_SUBSCRIPTIONS = gql`
+export const GET_FULL_ACCOUNT_SUBSCRIPTIONS = gql`
   query MyQuery($contractId: String!) {
     eventByContractId(searchedContractId: $contractId) {
       edges {

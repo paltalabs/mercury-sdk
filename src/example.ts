@@ -1,15 +1,6 @@
 import { Mercury } from "./Mercury";
 import dotenv from "dotenv";
 
-import {
-  getSentPaymentsParser,
-  getReceivedPaymentsParser,
-  getPathPaymentsStrictSendParser,
-  getPathPaymentsStrictReceiveParser,
-  getLiquidityPoolWithdrawParser,
-  getLiquidityPoolDepositParser,
-} from "./utils/parsers";
-
 dotenv.config();
 
 (async function () {
@@ -27,9 +18,13 @@ dotenv.config();
     password: process.env.MERCURY_TESTER_PASSWORD!,
   });
 
-  const res = await mercuryInstance.getContractSubscriptions({
+  const res = await mercuryInstance.getContractEvents({
     contractId: "GDKXVNZXCJERWN7FSBOUPE5HKQ62LKYVZZYI4PMZHFVN6IWOFVRVI6LH",
   });
+  const res2 = await mercuryInstance.getAllContractEventSubscriptions();
+  const res3 = await mercuryInstance.getAllFullAccountSubscriptions();
 
   console.log(JSON.stringify(res, null, 2));
+  console.log(JSON.stringify(res2, null, 2));
+  console.log(JSON.stringify(res3, null, 2));
 })();

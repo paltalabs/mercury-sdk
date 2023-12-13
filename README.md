@@ -40,17 +40,13 @@ mercuryInstance.subscribeToFullAccount({
 Review subscriptions:
 
 ```typescript
-mercuryInstance.getContractSubscriptions({
-  address: "someStellarAddress",
-});
+mercuryInstance.getAllContractEventSubscriptions();
 ```
 
 or for Accounts
 
 ```typescript
-mercuryInstance.getFullAccountSubscriptions({
-  address: "someStellarAddress",
-});
+mercuryInstance.getAllFullAccountSubscriptions();
 ```
 
 ### Retrieve information

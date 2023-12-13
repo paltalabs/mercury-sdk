@@ -1,4 +1,4 @@
-export interface GetContractSubscriptionsResponse {
+export interface GetContractEventsResponse {
   eventByContractId: EventByContractID;
 }
 
