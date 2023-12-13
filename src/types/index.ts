@@ -18,3 +18,4 @@ export {
   LiquidityPoolDepositByPublicKeyResponse,
   LiquidityPoolWithdrawByPublicKeyResponse,
 } from "./liquidityPool";
+export { GetContractSubscriptionsResponse } from "./getContractSubscriptions";

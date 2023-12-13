@@ -14,6 +14,7 @@ import {
   SubscribeToLedgerEntriesArgs,
   SubscribeToLedgerEntriesExpirationArgs,
   LiquidityPoolWithdrawByPublicKeyResponse,
+  GetContractSubscriptionsResponse,
 } from "./types";
 import { SubscribeToContractEventsArgs } from "./types/subscriptions";
 import { toSnakeCase } from "./utils";
@@ -323,6 +324,20 @@ export class Mercury {
     return this._graphqlRequest<LiquidityPoolDepositByPublicKeyResponse>({
       body: {
         request: QUERIES.GET_LIQUIDITY_POOL_DEPOSIT_BY_PUBLIC_KEY,
+        variables: args,
+      },
+    });
+  }
+
+  /**
+   * @param args Arguments for the query:
+   * - contractId: Contract ID to retrieve subscriptions from.
+   * @returns Events the contract is subscribed to.
+   */
+  public async getContractSubscriptions(args: { contractId: string }) {
+    return this._graphqlRequest<GetContractSubscriptionsResponse>({
+      body: {
+        request: QUERIES.GET_CONTRACT_SUBSCRIPTIONS,
         variables: args,
       },
     });
