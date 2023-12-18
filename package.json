@@ -17,7 +17,8 @@
     "soroban"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf dist && tsc",
+    "clean": "rm -rf dist",
     "start:example": "npx ts-node src/example.ts"
   },
   "dependencies": {
