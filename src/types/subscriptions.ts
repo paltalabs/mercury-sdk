@@ -18,5 +18,5 @@ export interface SubscribeToLedgerEntriesExpirationArgs {
 }
 
 export interface SubscribeToFullAccountArgs {
-  address: string;
+  publicKey: string;
 }

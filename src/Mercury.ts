@@ -13,11 +13,14 @@ import {
   SubscribeToFullAccountArgs,
   SubscribeToLedgerEntriesArgs,
   SubscribeToLedgerEntriesExpirationArgs,
+  LiquidityPoolWithdrawByPublicKeyResponse,
+  GetContractEventsResponse,
+  GetAllContractEventSubscriptionsResponse,
+  GetAllFullAccountSubscriptionsResponse,
 } from "./types";
 import { SubscribeToContractEventsArgs } from "./types/subscriptions";
 import { toSnakeCase } from "./utils";
-import * as MUTATIONS from "./graphql/mutations";
-import * as QUERIES from "./graphql/queries";
+import { MUTATIONS, QUERIES } from "./graphql";
 
 interface MercuryOptions {
   backendEndpoint: string;
@@ -173,12 +176,17 @@ export class Mercury {
   /**
    * Subscribes to the full account details.
    * @param args Arguments for the subscription:
-   *   - address: Public key of the account to subscribe to.
+   *   - publicKey: Public key of the account to subscribe to.
    * @returns Subscription result.
    */
   public async subscribeToFullAccount(args: SubscribeToFullAccountArgs) {
-    const body = this._createRequestBody(args);
-    return this._backendRequest({ method: "POST", url: "/account", body });
+    const publickey = args.publicKey;
+
+    return this._backendRequest({
+      method: "POST",
+      url: "/account",
+      body: { publickey },
+    });
   }
 
   /**
@@ -269,14 +277,12 @@ export class Mercury {
    * @returns Path payments strict send by public key.
    */
   public async getPathPaymentsStrictSend(args: { publicKey: string }) {
-    return this._graphqlRequest<GetPathPaymentsStrictReceiveByPublicKeyResponse>(
-      {
-        body: {
-          request: QUERIES.GET_PATH_PAYMENTS_STRICT_SEND_BY_PUBLIC_KEY,
-          variables: args,
-        },
-      }
-    );
+    return this._graphqlRequest<GetPathPaymentsStrictSendByPublicKeyResponse>({
+      body: {
+        request: QUERIES.GET_PATH_PAYMENTS_STRICT_SEND_BY_PUBLIC_KEY,
+        variables: args,
+      },
+    });
   }
 
   /**
@@ -285,12 +291,14 @@ export class Mercury {
    * @returns Path payments strict receive by public key.
    */
   public async getPathPaymentsStrictReceive(args: { publicKey: string }) {
-    return this._graphqlRequest<GetPathPaymentsStrictSendByPublicKeyResponse>({
-      body: {
-        request: QUERIES.GET_PATH_PAYMENTS_STRICT_RECEIVE_BY_PUBLIC_KEY,
-        variables: args,
-      },
-    });
+    return this._graphqlRequest<GetPathPaymentsStrictReceiveByPublicKeyResponse>(
+      {
+        body: {
+          request: QUERIES.GET_PATH_PAYMENTS_STRICT_RECEIVE_BY_PUBLIC_KEY,
+          variables: args,
+        },
+      }
+    );
   }
 
   /**
@@ -301,7 +309,7 @@ export class Mercury {
   public async getLiquidityPoolWithdraw(args: { publicKey: string }) {
     //TODO: Type the response
 
-    return this._graphqlRequest({
+    return this._graphqlRequest<LiquidityPoolWithdrawByPublicKeyResponse>({
       body: {
         request: QUERIES.GET_LIQUIDITY_POOL_WITHDRAW_BY_PUBLIC_KEY,
         variables: args,
@@ -318,6 +326,42 @@ export class Mercury {
     return this._graphqlRequest<LiquidityPoolDepositByPublicKeyResponse>({
       body: {
         request: QUERIES.GET_LIQUIDITY_POOL_DEPOSIT_BY_PUBLIC_KEY,
+        variables: args,
+      },
+    });
+  }
+
+  /**
+   * @returns All contracts event subscriptions.
+   */
+  public async getAllContractEventSubscriptions() {
+    return this._graphqlRequest<GetAllContractEventSubscriptionsResponse>({
+      body: {
+        request: QUERIES.GET_ALL_CONTRACT_EVENT_SUBSCRIPTIONS,
+      },
+    });
+  }
+
+  /**
+   * @returns All full account subscriptions.
+   */
+  public async getAllFullAccountSubscriptions() {
+    return this._graphqlRequest<GetAllFullAccountSubscriptionsResponse>({
+      body: {
+        request: QUERIES.GET_ALL_FULL_ACCOUNT_SUBSCRIPTIONS,
+      },
+    });
+  }
+
+  /**
+   * @param args Arguments for the query:
+   * - contractId: Contract ID to retrieve subscriptions from.
+   * @returns Events the contract is subscribed to.
+   */
+  public async getContractEvents(args: { contractId: string }) {
+    return this._graphqlRequest<GetContractEventsResponse>({
+      body: {
+        request: QUERIES.GET_CONTRACT_EVENTS,
         variables: args,
       },
     });

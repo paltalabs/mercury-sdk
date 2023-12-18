@@ -14,19 +14,19 @@ export interface Node {
   accountBySource: AccountBy;
   accountByDestination: AccountBy;
   assetByDestAsset: AssetBy;
-  assetByPath1: null;
+  assetByPath1: AssetBy;
   assetByPath2: AssetBy;
   assetByPath3: AssetBy;
   assetByPath4: AssetBy;
-  assetByPath5: null;
-  assetBySendAsset: null;
+  assetByPath5: AssetBy;
+  assetBySendAsset: AssetBy;
   destAssetNative: boolean;
   destMin: string;
   path1Native: boolean;
   path2Native: boolean;
   path3Native: boolean;
   path4Native: boolean;
-  path5Native: null;
+  path5Native: AssetBy;
   sendAmount: string;
   sendAssetNative: boolean;
 }
