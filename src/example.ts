@@ -1,6 +1,7 @@
 import { Mercury } from "./Mercury";
-import dotenv from "dotenv";
+import { getContractEventsParser } from "./utils/parsers/getContractEventsParser";
 
+import dotenv from "dotenv";
 dotenv.config();
 
 (async function () {
@@ -19,12 +20,11 @@ dotenv.config();
   });
 
   const res = await mercuryInstance.getContractEvents({
-    contractId: "GDKXVNZXCJERWN7FSBOUPE5HKQ62LKYVZZYI4PMZHFVN6IWOFVRVI6LH",
+    contractId: "CAGC46HNBMEZJP62PPTSUBUCS7LWBS5QLRNFSRCA4Q2A57YSPYBKGSTM",
   });
-  const res2 = await mercuryInstance.getAllContractEventSubscriptions();
-  const res3 = await mercuryInstance.getAllFullAccountSubscriptions();
+  console.log(JSON.stringify(res.data, null, 2) + "\n");
 
-  console.log(JSON.stringify(res, null, 2));
-  console.log(JSON.stringify(res2, null, 2));
-  console.log(JSON.stringify(res3, null, 2));
+  const parsed = getContractEventsParser(res.data!);
+
+  console.log(JSON.stringify(parsed, null, 2) + "\n");
 })();

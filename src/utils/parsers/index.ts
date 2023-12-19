@@ -1,6 +1,7 @@
-export { getSentPaymentsParser } from "./getSentPaymentsParser";
-export { getReceivedPaymentsParser } from "./getReceivedPaymentsParser";
-export { getPathPaymentsStrictSendParser } from "./getPathPaymentsStrictSendParser";
-export { getPathPaymentsStrictReceiveParser } from "./getPathPaymentsStrictReceiveParser";
-export { getLiquidityPoolWithdrawParser } from "./getLiquidityPoolWithdrawParser";
+export { getContractEventsParser } from "./getContractEventsParser";
 export { getLiquidityPoolDepositParser } from "./getLiquidityPoolDepositParser";
+export { getLiquidityPoolWithdrawParser } from "./getLiquidityPoolWithdrawParser";
+export { getPathPaymentsStrictReceiveParser } from "./getPathPaymentsStrictReceiveParser";
+export { getPathPaymentsStrictSendParser } from "./getPathPaymentsStrictSendParser";
+export { getReceivedPaymentsParser } from "./getReceivedPaymentsParser";
+export { getSentPaymentsParser } from "./getSentPaymentsParser";
