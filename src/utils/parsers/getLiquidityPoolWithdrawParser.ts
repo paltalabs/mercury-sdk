@@ -6,6 +6,8 @@ export interface getLiquidityPoolWithdrawParsed {
   maxAmountA?: string;
   maxAmountB?: string;
   amount?: string;
+  ledger?: number;
+  timestamp?: number;
 }
 
 export const getLiquidityPoolWithdrawParser = (
@@ -19,6 +21,8 @@ export const getLiquidityPoolWithdrawParser = (
         amount: edge?.node?.amount,
         maxAmountA: edge?.node?.maxAmountA,
         maxAmountB: edge?.node?.maxAmountB,
+        ledger: edge?.node?.txInfoByTx?.ledgerByLedger?.sequence,
+        timestamp: edge?.node?.txInfoByTx?.ledgerByLedger?.closeTime,
       };
     }
   );

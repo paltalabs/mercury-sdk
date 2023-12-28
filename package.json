@@ -1,6 +1,6 @@
 {
   "name": "mercury-sdk",
-  "version": "0.1.10",
+  "version": "0.1.12",
   "description": "handles subscriptions, data retrieval and processing of mercury indexer",
   "main": "dist/index.js",
   "repository": "https://github.com/paltalabs/mercury-sdk",
@@ -21,7 +21,9 @@
     "start:example": "npx ts-node src/example.ts"
   },
   "dependencies": {
+    "@stellar/stellar-sdk": "^11.1.0",
     "axios": "^1.6.2",
+    "bigint-conversion": "^2.4.3",
     "dotenv": "^16.3.1",
     "graphql": "^16.8.1",
     "graphql-request": "^6.1.0",

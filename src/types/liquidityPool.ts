@@ -20,7 +20,16 @@ export interface Node {
   minPriceD: number;
   maxPriceN: number;
   maxPriceD: number;
-  ledger: number;
+  txInfoByTx: TxInfoByTx;
+}
+
+export interface TxInfoByTx {
+  ledgerByLedger: LedgerByLedger;
+}
+
+export interface LedgerByLedger {
+  closeTime: number;
+  sequence: number;
 }
 
 export interface LiquidityPoolWithdrawByPublicKeyResponse {

@@ -24,9 +24,11 @@ export const GET_SENT_PAYMENTS = gql`
             publickey
             muxedaccountid
           }
-          ledgerByLedger {
-            closeTime
-            sequence
+          txInfoByTx {
+            ledgerByLedger {
+              closeTime
+              sequence
+            }
           }
           assetNative
         }
