@@ -9,6 +9,8 @@ export interface getLiquidityPoolDepositParsed {
   minPriceD?: number;
   maxPriceN?: number;
   maxPriceD?: number;
+  ledger?: number;
+  timestamp?: number;
 }
 
 export const getLiquidityPoolDepositParser = (
@@ -25,6 +27,8 @@ export const getLiquidityPoolDepositParser = (
         minPriceD: edge?.node?.minPriceD,
         maxPriceN: edge?.node?.maxPriceN,
         maxPriceD: edge?.node?.maxPriceD,
+        ledger: edge?.node?.txInfoByTx?.ledgerByLedger?.sequence,
+        timestamp: edge?.node?.txInfoByTx?.ledgerByLedger?.closeTime,
       };
     }
   );

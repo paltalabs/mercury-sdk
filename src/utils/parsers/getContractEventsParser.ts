@@ -14,11 +14,12 @@ export const getContractEventsParser = (data: GetContractEventsResponse) => {
     const topic1Js = scValToJs(topic1Xdr);
     const topic2Xdr = StellarSdk.xdr.ScVal.fromXDR(edge.node.topic2, "base64")
     const topic2Js = scValToJs(topic2Xdr);
-    console.log("topic1Js:", topic1Js)
-    console.log("topic2Js:", topic2Js)
-    
+        
     jsValues.topic1 = topic1Js;
     jsValues.topic2 = topic2Js;
+    // Add ledger number and timestamp
+    jsValues.ledger = edge.node.ledger;
+    jsValues.timestamp = edge.node.ledgerTimestamp;
 
     return jsValues;
   });

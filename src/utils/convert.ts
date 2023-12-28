@@ -174,3 +174,17 @@ export function u128ToScVal(i: bigint): xdr.ScVal {
     })
   );
 }
+
+export function stellarAssetId(codeHex: string, issuer: string) {
+  if (codeHex == undefined || issuer == undefined) return undefined
+  const code = hexToString(codeHex.slice(2))
+return `${code}:${issuer}`
+}
+
+export function hexToString(hex: string) {
+ const convertedString = hex.match(/.{1,2}/g)! // Split the string into pairs of characters
+   .map((byte) => String.fromCharCode(parseInt(byte, 16))) // Convert each pair to its corresponding character code
+   .join(""); // Join the characters into a single string
+ const trimmedString = convertedString.replace(/\0+$/, ''); // Remove trailing zeros
+ return trimmedString;
+}

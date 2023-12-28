@@ -25,6 +25,11 @@ export interface Node {
   muxedaccountBySourceMuxed: any;
   ledgerByLedger: LedgerByLedger;
   assetNative: boolean;
+  txInfoByTx: TxInfoByTx;
+}
+
+export interface TxInfoByTx {
+  ledgerByLedger: LedgerByLedger;
 }
 
 export interface AccountBy {
