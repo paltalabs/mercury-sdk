@@ -20,7 +20,7 @@ dotenv.config();
   });
 
   const res = await mercuryInstance.getContractEvents({
-    contractId: "CAGC46HNBMEZJP62PPTSUBUCS7LWBS5QLRNFSRCA4Q2A57YSPYBKGSTM",
+    contractId: "GARDNDBY2VPXVQ46JJR52LNLFHIRQCQZATAYGOERKM4YBWZRUKIJ73BC",
   });
   console.log(JSON.stringify(res.data, null, 2) + "\n");
 
