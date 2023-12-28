@@ -8,7 +8,17 @@ export const getContractEventsParser = (data: GetContractEventsResponse) => {
 
     const data = StellarSdk.xdr.ScVal.fromXDR(base64Xdr, "base64");
 
-    const jsValues = scValToJs(data);
+    const jsValues: any = scValToJs(data);
+
+    const topic1Xdr = StellarSdk.xdr.ScVal.fromXDR(edge.node.topic1, "base64")
+    const topic1Js = scValToJs(topic1Xdr);
+    const topic2Xdr = StellarSdk.xdr.ScVal.fromXDR(edge.node.topic2, "base64")
+    const topic2Js = scValToJs(topic2Xdr);
+    console.log("topic1Js:", topic1Js)
+    console.log("topic2Js:", topic2Js)
+    
+    jsValues.topic1 = topic1Js;
+    jsValues.topic2 = topic2Js;
 
     return jsValues;
   });
