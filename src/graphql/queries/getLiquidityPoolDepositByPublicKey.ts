@@ -14,7 +14,12 @@ export const GET_LIQUIDITY_POOL_DEPOSIT_BY_PUBLIC_KEY = gql`
           minPriceD
           maxPriceN
           maxPriceD
-          ledger
+          txInfoByTx {
+            ledgerByLedger {
+              sequence
+              closeTime
+            }
+          }
         }
       }
     }

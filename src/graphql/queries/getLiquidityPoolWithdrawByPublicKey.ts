@@ -11,7 +11,12 @@ export const GET_LIQUIDITY_POOL_WITHDRAW_BY_PUBLIC_KEY = gql`
           amount
           minAmountA
           minAmountB
-          ledger
+          txInfoByTx {
+            ledgerByLedger {
+              sequence
+              closeTime
+            }
+          }
         }
       }
     }

@@ -1,4 +1,13 @@
 import { Mercury } from "./Mercury";
+// import { getContractEventsParser } from "./utils/parsers/getContractEventsParser";
+
+import {
+  getSentPaymentsParser,
+  getReceivedPaymentsParser,
+  getLiquidityPoolWithdrawParser,
+  getLiquidityPoolDepositParser,
+  getContractEventsParser
+} from "."
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -10,8 +19,6 @@ dotenv.config();
     password: process.env.MERCURY_TESTER_PASSWORD,
   };
 
-  console.log(mercuryArgs);
-
   const mercuryInstance = new Mercury({
     backendEndpoint: process.env.MERCURY_BACKEND_ENDPOINT!,
     graphqlEndpoint: process.env.MERCURY_GRAPHQL_ENDPOINT!,
@@ -19,33 +26,69 @@ dotenv.config();
     password: process.env.MERCURY_TESTER_PASSWORD!,
   });
 
-  // const res = await mercuryInstance.subscribeToContractEvents({
-  //   contractId: "GDKXVNZXCJERWN7FSBOUPE5HKQ62LKYVZZYI4PMZHFVN6IWOFVRVI6LH",
-  // });
+  const publicKey = "GBDJYBFPYUY7XXI5XCT473VJRT7PRGMRA2AJ2TKUKGPLJ5ZGVPJYKEAR";
+  const publicKey2 = "GARDNDBY2VPXVQ46JJR52LNLFHIRQCQZATAYGOERKM4YBWZRUKIJ73BC";
+  const routerContractAddress = "CCKXLDNKPXWJZP5YMHGDOQJDKVJIF4T44BQIZRTBFYUIKVE4CYHU47BK";
 
-  // const res2 = await mercuryInstance.getSentPayments({
-  //   publicKey: "GCHR5WWPDFF3U3HP2NA6TI6FCQPYEWS3UOPIPJKZLAAFM57CEG4ZYBWP",
-  // });
-
-  // const res3 = await mercuryInstance.getReceivedPayments({
-  //   publicKey: "GCHR5WWPDFF3U3HP2NA6TI6FCQPYEWS3UOPIPJKZLAAFM57CEG4ZYBWP",
-  // });
-
-  const res4 = await mercuryInstance.getPathPaymentsStrictSend({
-    publicKey: "GBXRF7BXKPNQIIWAAO6Y6CFIUXX6GCVLILANFPSENPKAFFZA4KOVCLMB",
+  const sentPaymentsResponse = await mercuryInstance.getSentPayments({
+    publicKey,
   });
 
-  // const res5 = await mercuryInstance.getPathPaymentsStrictReceive({
-  //   publicKey: "GBXRF7BXKPNQIIWAAO6Y6CFIUXX6GCVLILANFPSENPKAFFZA4KOVCLMB",
-  // });
+  if (sentPaymentsResponse.ok) {
+    const sentPaymentsParsedData = getSentPaymentsParser(
+      sentPaymentsResponse.data!
+    );
+    console.log("sentPaymentsParsedData")
+    console.log(JSON.stringify(sentPaymentsParsedData, null, 2) + "\n");
+  }
 
-  const res6 = await mercuryInstance.getLiquidityPoolWithdraw({
-    publicKey: "GBXRF7BXKPNQIIWAAO6Y6CFIUXX6GCVLILANFPSENPKAFFZA4KOVCLMB",
+  //Received payments
+  const receivedPaymentsResponse = await mercuryInstance.getReceivedPayments({
+    publicKey,
   });
 
-  const res7 = await mercuryInstance.getLiquidityPoolDeposit({
-    publicKey: "GBXRF7BXKPNQIIWAAO6Y6CFIUXX6GCVLILANFPSENPKAFFZA4KOVCLMB",
-  });
+  if (receivedPaymentsResponse.ok) {
+    const receivedPaymentsParsedData = getReceivedPaymentsParser(
+      receivedPaymentsResponse.data!
+    );
+    console.log("receivedPaymentsParsedData")
+    console.log(JSON.stringify(receivedPaymentsParsedData, null, 2) + "\n");
+  }
 
-  console.log(JSON.stringify({ res4, res6, res7 }));
+  //Liquidity Pool Withdraw
+  const liquidityPoolWithdrawResponse =
+    await mercuryInstance.getLiquidityPoolWithdraw({
+      publicKey: publicKey2,
+    });
+
+  if (liquidityPoolWithdrawResponse.ok) {
+    const liquidityPoolWithdrawParsedData = getLiquidityPoolWithdrawParser(
+      liquidityPoolWithdrawResponse.data!
+    );
+    console.log("liquidityPoolWithdrawParsedData")
+    console.log(JSON.stringify(liquidityPoolWithdrawParsedData, null, 2) + "\n");
+  }
+
+  //Liquidity Pool Deposit
+  const liquidityPoolDepositResponse =
+    await mercuryInstance.getLiquidityPoolDeposit({
+      publicKey,
+    });
+
+  if (liquidityPoolDepositResponse.ok) {
+    const liquidityPoolDepositParsedData = getLiquidityPoolDepositParser(
+      liquidityPoolDepositResponse.data!
+    );
+    console.log("liquidityPoolDepositParsedData")
+    console.log(JSON.stringify(liquidityPoolDepositParsedData, null, 2) + "\n");
+  }
+
+
+  const getContractEventsRes = await mercuryInstance.getContractEvents({
+    contractId: routerContractAddress,
+  });
+  const parsedContractEvents = getContractEventsParser(getContractEventsRes.data!);
+  const eventByPublicKey = parsedContractEvents.filter((event) => event.to === publicKey);
+  console.log("eventByPublicKey")
+  console.log(JSON.stringify(eventByPublicKey, null, 2) + "\n");
 })();
