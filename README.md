@@ -204,29 +204,26 @@ async function someFunction() {
     soroswapEvents.data!
   );
 ```
-The output:
-```json
-[
-  {
-    "from": "address1", 
-    "to": "address2", 
-    "asset": {
-        "asset_type": "",
-        "isuer":""
-        },
-    "amount":"1000",
-  }
-]
-```
-
 
 ## Local development
 
-Use `yarn`
+Setup your environment variables:
+
+```
+cp .env.example .env
+```
+complete the data
 
 You can use the script `run.sh`. To run a docker image with node.
 
+Use `yarn`
 Install dependencies with `yarn`
+
+You can play around with the code in `src/example.ts` and run it with:
+
+```
+yarn start:example
+```
 
 In order to get your changes reflected in another project that is using `yarn link` to point to this one you need to run:
 
