@@ -99,6 +99,14 @@ mercuryInstance.getLiquidityPoolWithdraw({
 });
 ```
 
+retrieve contract events: 
+  
+  ```typescript
+mercuryInstance.getContractEvents({
+  contractId: "someContractId",
+});
+```
+
 ### Parse data results
 
 You can use data parsers to get the results in a cleaner way than just the big GraphQL response
@@ -187,18 +195,27 @@ async function someFunction() {
     );
   }
 }
+  // Soroswap Events:
+  const soroswapEvents = 
+    await mercuryInstance.getContractEvents({
+      contractId: "someContractId",
+    });
+  const soroswapEventsParsedData = await getContractEventsParser(
+    soroswapEvents.data!
+  );
 ```
 The output:
 ```json
 [
-    {
-        "from": "address1", 
-        "to": "address2", 
-        "asset": {
-            "asset_type": "",
-            "isuer":""
-            },
-        "amount":"1000",
+  {
+    "from": "address1", 
+    "to": "address2", 
+    "asset": {
+        "asset_type": "",
+        "isuer":""
+        },
+    "amount":"1000",
+  }
 ]
 ```
 
