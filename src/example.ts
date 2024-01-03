@@ -6,7 +6,8 @@ import {
   getReceivedPaymentsParser,
   getLiquidityPoolWithdrawParser,
   getLiquidityPoolDepositParser,
-  getContractEventsParser
+  getContractEventsParser,
+  getSoroswapReserves
 } from "."
 import dotenv from "dotenv";
 dotenv.config();
@@ -29,6 +30,8 @@ dotenv.config();
   const publicKey = "GBDJYBFPYUY7XXI5XCT473VJRT7PRGMRA2AJ2TKUKGPLJ5ZGVPJYKEAR";
   const publicKey2 = "GARDNDBY2VPXVQ46JJR52LNLFHIRQCQZATAYGOERKM4YBWZRUKIJ73BC";
   const routerContractAddress = "CCKXLDNKPXWJZP5YMHGDOQJDKVJIF4T44BQIZRTBFYUIKVE4CYHU47BK";
+  const tokenA = "CBKZMWGE7E3VDJRCHRNLAHKYL2JMCC4METUJA262WXKN2SANJXVQYE3N";
+  const tokenB = "CCFB3TPPJHDLDYRTPJEFYJ37FOVASDCIZEJ3DYKOFUQO4WJHHZ7SML2D";
 
   const sentPaymentsResponse = await mercuryInstance.getSentPayments({
     publicKey,
@@ -91,4 +94,10 @@ dotenv.config();
   const eventByPublicKey = parsedContractEvents.filter((event) => event.to === publicKey);
   console.log("eventByPublicKey")
   console.log(JSON.stringify(eventByPublicKey, null, 2) + "\n");
+
+  //Soroswap reserves
+  const soroswapReserves = await getSoroswapReserves(mercuryInstance, routerContractAddress, tokenA, tokenB);
+  console.log(soroswapReserves);
+
+
 })();
