@@ -1,0 +1,67 @@
+
+export const MOCK_PARSED_CONTRACT_EVENTS = [
+    {
+      amount_a: '2',
+      amount_b: '2',
+      liquidity: '1',
+      pair: 'CAMCPA2QDCC2K3DJOSRKRGQXETHQND7KK46VOEW3YLL5OP7BDXNB37YF',
+      to: 'GBDJYBFPYUY7XXI5XCT473VJRT7PRGMRA2AJ2TKUKGPLJ5ZGVPJYKEAR',
+      token_a: 'CBKZMWGE7E3VDJRCHRNLAHKYL2JMCC4METUJA262WXKN2SANJXVQYE3N',
+      token_b: 'CCFB3TPPJHDLDYRTPJEFYJ37FOVASDCIZEJ3DYKOFUQO4WJHHZ7SML2D',
+      topic1: 'SoroswapRouter',
+      topic2: 'add',
+      ledger: 134133,
+      timestamp: 1703625379
+    },
+    {
+        amount_a: '2',
+        amount_b: '2',
+        liquidity: '1',
+        pair: 'CAMCPA2QDCC2K3DJOSRKRGQXETHQND7KK46VOEW3YLL5OP7BDXNB37YF',
+        to: 'GBDJYBFPYUY7XXI5XCT473VJRT7PRGMRA2AJ2TKUKGPLJ5ZGVPJYKEAR',
+        token_a: 'CBKZMWGE7E3VDJRCHRNLAHKYL2JMCC4METUJA262WXKN2SANJXVQYE3N',
+        token_b: 'CCFB3TPPJHDLDYRTPJEFYJ37FOVASDCIZEJ3DYKOFUQO4WJHHZ7SML2D',
+        topic1: 'SoroswapRouter',
+        topic2: 'add',
+        ledger: 134134,
+        timestamp: 1703625379
+    },
+    {
+        amount_a: '2',
+        amount_b: '2',
+        liquidity: '1',
+        pair: 'CAMCPA2QDCC2K3DJOSRKRGQXETHQND7KK46VOEW3YLL5OP7BDXNB37YF',
+        to: 'GBDJYBFPYUY7XXI5XCT473VJRT7PRGMRA2AJ2TKUKGPLJ5ZGVPJYKEAR',
+        token_a: 'CBKZMWGE7E3VDJRCHRNLAHKYL2JMCC4METUJA262WXKN2SANJXVQYE3N',
+        token_b: 'CCFB3TPPJHDLDYRTPJEFYJ37FOVASDCIZEJ3DYKOFUQO4WJHHZ7SML2D',
+        topic1: 'SoroswapRouter',
+        topic2: 'add',
+        ledger: 134135,
+        timestamp: 1703625379
+    },
+    {
+      amounts: [ '2', '1' ],
+      path: [
+        'CBKZMWGE7E3VDJRCHRNLAHKYL2JMCC4METUJA262WXKN2SANJXVQYE3N',
+        'CCFB3TPPJHDLDYRTPJEFYJ37FOVASDCIZEJ3DYKOFUQO4WJHHZ7SML2D'
+      ],
+      to: 'GBDJYBFPYUY7XXI5XCT473VJRT7PRGMRA2AJ2TKUKGPLJ5ZGVPJYKEAR',
+      topic1: 'SoroswapRouter',
+      topic2: 'swap',
+      ledger: 134136,
+      timestamp: 1703625384
+    },
+    {
+      amount_a: '2',
+      amount_b: '2',
+      liquidity: '1',
+      pair: 'CAMCPA2QDCC2K3DJOSRKRGQXETHQND7KK46VOEW3YLL5OP7BDXNB37YF',
+      to: 'GBDJYBFPYUY7XXI5XCT473VJRT7PRGMRA2AJ2TKUKGPLJ5ZGVPJYKEAR',
+      token_a: 'CBKZMWGE7E3VDJRCHRNLAHKYL2JMCC4METUJA262WXKN2SANJXVQYE3N',
+      token_b: 'CCFB3TPPJHDLDYRTPJEFYJ37FOVASDCIZEJ3DYKOFUQO4WJHHZ7SML2D',
+      topic1: 'SoroswapRouter',
+      topic2: 'remove',
+      ledger: 134137,
+      timestamp: 1703625389
+    }
+  ];
