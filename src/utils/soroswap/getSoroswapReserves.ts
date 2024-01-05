@@ -50,9 +50,7 @@ function handleSwapEvent(event: any, tokenA: string, tokenB: string) {
 }
 
 
-export const getSoroswapReserves = async (parsedContractEvents: any[], tokenA: string, tokenB: string) => {
-    console.log(typeof parsedContractEvents);
-    
+export const getSoroswapReserves = async (parsedContractEvents: any[], tokenA: string, tokenB: string) => {  
     const filteredEvents = parsedContractEvents.filter(event => {
         if (event.topic2 === "add" || event.topic2 === "remove") {
             return (event.token_a === tokenA && event.token_b === tokenB) || 

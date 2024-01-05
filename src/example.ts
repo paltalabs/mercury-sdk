@@ -7,9 +7,11 @@ import {
   getLiquidityPoolWithdrawParser,
   getLiquidityPoolDepositParser,
   getContractEventsParser,
-  getSoroswapReserves
+  getSoroswapReserves,
+  MOCK_PARSED_CONTRACT_EVENTS
 } from "."
 import dotenv from "dotenv";
+import { log } from "console";
 dotenv.config();
 
 (async function () {
@@ -41,8 +43,8 @@ dotenv.config();
     const sentPaymentsParsedData = getSentPaymentsParser(
       sentPaymentsResponse.data!
     );
-    console.log("sentPaymentsParsedData")
-    console.log(JSON.stringify(sentPaymentsParsedData, null, 2) + "\n");
+    // console.log("sentPaymentsParsedData")
+    // console.log(JSON.stringify(sentPaymentsParsedData, null, 2) + "\n");
   }
 
   //Received payments
@@ -54,8 +56,8 @@ dotenv.config();
     const receivedPaymentsParsedData = getReceivedPaymentsParser(
       receivedPaymentsResponse.data!
     );
-    console.log("receivedPaymentsParsedData")
-    console.log(JSON.stringify(receivedPaymentsParsedData, null, 2) + "\n");
+    // console.log("receivedPaymentsParsedData")
+    // console.log(JSON.stringify(receivedPaymentsParsedData, null, 2) + "\n");
   }
 
   //Liquidity Pool Withdraw
@@ -68,8 +70,8 @@ dotenv.config();
     const liquidityPoolWithdrawParsedData = getLiquidityPoolWithdrawParser(
       liquidityPoolWithdrawResponse.data!
     );
-    console.log("liquidityPoolWithdrawParsedData")
-    console.log(JSON.stringify(liquidityPoolWithdrawParsedData, null, 2) + "\n");
+    // console.log("liquidityPoolWithdrawParsedData")
+    // console.log(JSON.stringify(liquidityPoolWithdrawParsedData, null, 2) + "\n");
   }
 
   //Liquidity Pool Deposit
@@ -82,8 +84,8 @@ dotenv.config();
     const liquidityPoolDepositParsedData = getLiquidityPoolDepositParser(
       liquidityPoolDepositResponse.data!
     );
-    console.log("liquidityPoolDepositParsedData")
-    console.log(JSON.stringify(liquidityPoolDepositParsedData, null, 2) + "\n");
+    // console.log("liquidityPoolDepositParsedData")
+    // console.log(JSON.stringify(liquidityPoolDepositParsedData, null, 2) + "\n");
   }
 
 
@@ -91,13 +93,20 @@ dotenv.config();
     contractId: routerContractAddress,
   });
   const parsedContractEvents = getContractEventsParser(getContractEventsRes.data!);
+  console.log();
+  console.log();
+  console.log("Parsed Contract Events");
+  console.log(parsedContractEvents);
+  console.log();
+  console.log();
   const eventByPublicKey = parsedContractEvents.filter((event) => event.to === publicKey);
-  console.log("eventByPublicKey")
-  console.log(JSON.stringify(eventByPublicKey, null, 2) + "\n");
+  // console.log("eventByPublicKey")
+  // console.log(JSON.stringify(eventByPublicKey, null, 2) + "\n");
 
   //Soroswap reserves
-  const soroswapReserves = await getSoroswapReserves(parsedContractEvents, tokenA, tokenB);
+  const soroswapReserves = await getSoroswapReserves(MOCK_PARSED_CONTRACT_EVENTS, tokenA, tokenB);
   console.log(soroswapReserves);
+  
   
 
 
