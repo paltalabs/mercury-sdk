@@ -1,12 +1,57 @@
-import { Mercury } from "../../Mercury";
-import { getContractEventsParser } from "../parsers/getContractEventsParser";
 
-export const getSoroswapReserves = async (mercuryInstance: Mercury, contractId: string, tokenA: string, tokenB?: string) => {
-    const getContractEventsRes = await mercuryInstance.getContractEvents({
-        contractId: contractId,
-    });
+function handleAddEvent(event: any, tokenA: string, tokenB: string) {
+    let tokenAQuantity = 0;
+    let tokenBQuantity = 0;
+    let liquidity = parseFloat(event.liquidity);
 
-    const parsedContractEvents = getContractEventsParser(getContractEventsRes.data!);
+    if (event.token_a === tokenA && event.token_b === tokenB) {
+        tokenAQuantity += parseFloat(event.amount_a);
+        tokenBQuantity += parseFloat(event.amount_b);
+    } else if (event.token_a === tokenB && event.token_b === tokenA) {
+        tokenAQuantity += parseFloat(event.amount_b);
+        tokenBQuantity += parseFloat(event.amount_a);
+    }
+
+    return { tokenAQuantity, tokenBQuantity, liquidity };
+}
+
+function handleRemoveEvent(event: any, tokenA: string, tokenB: string) {
+    let tokenAQuantity = 0;
+    let tokenBQuantity = 0;
+    let liquidity = -parseFloat(event.liquidity);
+
+    if (event.token_a === tokenA && event.token_b === tokenB) {
+        tokenAQuantity -= parseFloat(event.amount_a);
+        tokenBQuantity -= parseFloat(event.amount_b);
+    } else if (event.token_a === tokenB && event.token_b === tokenA) {
+        tokenAQuantity -= parseFloat(event.amount_b);
+        tokenBQuantity -= parseFloat(event.amount_a);
+    }
+
+    return { tokenAQuantity, tokenBQuantity, liquidity };
+}
+
+function handleSwapEvent(event: any, tokenA: string, tokenB: string) {
+    let tokenAQuantity = 0;
+    let tokenBQuantity = 0;
+
+    const amountA = parseFloat(event.amounts[0]);
+    const amountB = parseFloat(event.amounts[event.amounts.length - 1]);
+
+    if (event.path[0] === tokenA && event.path[event.path.length - 1] === tokenB) {
+        tokenAQuantity -= amountA;
+        tokenBQuantity += amountB;
+    } else if (event.path[0] === tokenB && event.path[event.path.length - 1] === tokenA) {
+        tokenAQuantity += amountB;
+        tokenBQuantity -= amountA;
+    }
+
+    return { tokenAQuantity, tokenBQuantity };
+}
+
+
+export const getSoroswapReserves = async (parsedContractEvents: any[], tokenA: string, tokenB: string) => {
+    console.log(typeof parsedContractEvents);
     
     const filteredEvents = parsedContractEvents.filter(event => {
         if (event.topic2 === "add" || event.topic2 === "remove") {
@@ -24,33 +69,20 @@ export const getSoroswapReserves = async (mercuryInstance: Mercury, contractId: 
     let liquidity = 0;
 
     filteredEvents.forEach(event => {
-        if (event.topic2 === "add" && event.token_a === tokenA && event.token_b === tokenB) {
-            tokenAQuantity += parseFloat(event.amount_a);
-            tokenBQuantity += parseFloat(event.amount_b);
-            liquidity += parseFloat(event.liquidity);
-        } else if (event.topic2 === "add" && event.token_a === tokenB && event.token_b === tokenA) {
-            tokenAQuantity += parseFloat(event.amount_b);
-            tokenBQuantity += parseFloat(event.amount_a);
-            liquidity += parseFloat(event.liquidity);
-        } else if (event.topic2 === "remove" && event.token_a === tokenA && event.token_b === tokenB) {
-            tokenAQuantity -= parseFloat(event.amount_a);
-            tokenBQuantity -= parseFloat(event.amount_b);
-            liquidity -= parseFloat(event.liquidity);
-        } else if (event.topic2 === "remove" && event.token_a === tokenB && event.token_b === tokenA) {
-            tokenAQuantity -= parseFloat(event.amount_b);
-            tokenBQuantity -= parseFloat(event.amount_a);
-            liquidity -= parseFloat(event.liquidity);
-        } else if (event.topic2 === "swap") {
-            const amountA = parseFloat(event.amounts[0]);
-            const amountB = parseFloat(event.amounts[event.amounts.length - 1]);
-            
-            if (event.path[0] === tokenA && event.path[event.path.length - 1] === tokenB) {
-                tokenAQuantity -= amountA;
-                tokenBQuantity += amountB;
-            } else if (event.path[0] === tokenB && event.path[event.path.length - 1] === tokenA) {
-                tokenAQuantity += amountB;
-                tokenBQuantity -= amountA;
-            }
+        let results;
+        switch (event.topic2) {
+            case "add":
+            case "remove":
+                results = event.topic2 === "add" ? handleAddEvent(event, tokenA, tokenB) : handleRemoveEvent(event, tokenA, tokenB);
+                tokenAQuantity += results.tokenAQuantity;
+                tokenBQuantity += results.tokenBQuantity;
+                liquidity += results.liquidity;
+                break;
+            case "swap":
+                results = handleSwapEvent(event, tokenA, tokenB);
+                tokenAQuantity += results.tokenAQuantity;
+                tokenBQuantity += results.tokenBQuantity;
+                break;
         }
     });
 

@@ -96,8 +96,11 @@ dotenv.config();
   console.log(JSON.stringify(eventByPublicKey, null, 2) + "\n");
 
   //Soroswap reserves
-  const soroswapReserves = await getSoroswapReserves(mercuryInstance, routerContractAddress, tokenA, tokenB);
+  const soroswapReserves = await getSoroswapReserves(parsedContractEvents, tokenA, tokenB);
   console.log(soroswapReserves);
+  
+
+
 
 
 })();
