@@ -27,6 +27,7 @@
     "dotenv": "^16.3.1",
     "graphql": "^16.8.1",
     "graphql-request": "^6.1.0",
+    "mercury-sdk": "^0.1.13",
     "typescript": "^5.3.2"
   },
   "devDependencies": {
