@@ -49,7 +49,13 @@ function handleSwapEvent(event: any, tokenA: string, tokenB: string) {
     return { tokenAQuantity, tokenBQuantity };
 }
 
-
+/**
+   * Calculates balance of a given token pair based on add, remove and swap operations.
+   * @param parsedContractEvents Object array with router contract events
+   * @param tokenA String for token A address.
+   * @param tokenB String for token B address.
+   * @returns Object with the total amount of tokenA, tokenB and liquidity for the given pair.
+   */
 export const getSoroswapReserves = async (parsedContractEvents: any[], tokenA: string, tokenB: string) => {  
     const filteredEvents = parsedContractEvents.filter(event => {
         if (event.topic2 === "add" || event.topic2 === "remove") {
