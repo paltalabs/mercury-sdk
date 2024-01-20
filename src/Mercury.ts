@@ -17,6 +17,7 @@ import {
   GetContractEventsResponse,
   GetAllContractEventSubscriptionsResponse,
   GetAllFullAccountSubscriptionsResponse,
+  GetAllFactoryPairContractsResponse
 } from "./types";
 import { SubscribeToContractEventsArgs } from "./types/subscriptions";
 import { toSnakeCase } from "./utils";
@@ -193,7 +194,8 @@ export class Mercury {
    * Create a new subscription to a ledger entry. This is especially useful in scenarios where events alone don't give you enough context.
    * @param args Arguments for the subscription:
    *   - contractId: ID of the contract.
-   *   - keyXdr: Entry key as base64 xdr
+   *   - keyXdr: Entry key as base64 xdr.
+   *   - durability: Durability of the entry.
    *   - maxSingleSize (optional): How much will one event cost at most (default: 2000)
    * @returns Subscription result.
    */
@@ -201,7 +203,12 @@ export class Mercury {
     const body = this._createRequestBody(args, {
       maxSingleSize: this._defaultMaxSingleSize,
     });
-    return this._backendRequest({ method: "POST", url: "/entry", body });
+    const response = await this._backendRequest({ method: "POST", url: "/entry", body })
+    .catch((error: string)=>{
+      console.error(error)
+      console.log(response)
+    })
+    return response
   }
 
   /**

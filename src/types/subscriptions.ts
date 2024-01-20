@@ -10,6 +10,7 @@ export interface SubscribeToContractEventsArgs {
 export interface SubscribeToLedgerEntriesArgs {
   contractId: string;
   keyXdr: string;
+  durability: string;
   maxSingleSize?: number;
 }
 
