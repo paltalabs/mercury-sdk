@@ -21,3 +21,4 @@ export {
 export { GetContractEventsResponse } from "./getContractEvents";
 export { GetAllContractEventSubscriptionsResponse } from "./getAllContractEventSubscriptions";
 export { GetAllFullAccountSubscriptionsResponse } from "./getAllFullAccountSubscriptions";
+export { ContractEntriesResponse } from "./getContractEntries";

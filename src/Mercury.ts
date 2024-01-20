@@ -17,7 +17,7 @@ import {
   GetContractEventsResponse,
   GetAllContractEventSubscriptionsResponse,
   GetAllFullAccountSubscriptionsResponse,
-  GetAllFactoryPairContractsResponse
+  ContractEntriesResponse
 } from "./types";
 import { SubscribeToContractEventsArgs } from "./types/subscriptions";
 import { toSnakeCase } from "./utils";
@@ -369,6 +369,21 @@ export class Mercury {
     return this._graphqlRequest<GetContractEventsResponse>({
       body: {
         request: QUERIES.GET_CONTRACT_EVENTS,
+        variables: args,
+      },
+    });
+  }
+
+  /**
+   * Retrieves all factory contract data based on the provided contract ID.
+   * @param args - The arguments for the request.
+   * @param args.contractId - The ID of the factory contract.
+   * @returns A promise that resolves to the response containing the factory contract data.
+   */
+  public async getContractEntries(args: { contractId: string }) {
+    return this._graphqlRequest<ContractEntriesResponse>({
+      body: {
+        request: QUERIES.GET_CONTRACT_ENTRIES,
         variables: args,
       },
     });
