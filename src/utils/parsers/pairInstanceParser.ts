@@ -1,17 +1,27 @@
 import { ContractEntriesResponse, PairEntry } from "../../types";
 import { scValToJs } from "../convert";
 import * as StellarSdk from "@stellar/stellar-sdk";
+
+/**
+ * Enum representing the key names for pair instance properties.
+ */
 enum keyNames {
-    Token0 = 0, // address public token0;
-    Token1 = 1, // address public token1;
-    Reserve0 = 2, //uint112 private reserve0;
-    Reserve1 = 3, // uint112 private reserve1;
-    FactoryAddress = 4,  // address public factory; 
-    TotalShares = 5, // TotalShares,
-    PairToken = 6, // liquidity pool token,
-    PairAddress = 7, // PairAddress,
+    Token0 = 0,         // address public token0;
+    Token1 = 1,         // address public token1;
+    Reserve0 = 2,       // uint112 private reserve0;
+    Reserve1 = 3,       // uint112 private reserve1;
+    FactoryAddress = 4, // address public factory; 
+    TotalShares = 5,    // TotalShares;
+    PairToken = 6,      // liquidity pool token:
+    PairAddress = 7,    // PairAddress;
 }
 
+/**
+ * Parses the contract entries response and returns an array of parsed pair entries.
+ * @param data The contract entries response object.
+ * @returns An array of parsed pair entries.
+ * @throws Error if no entries are provided or if no valueXdr is found in an entry.
+ */
 export const pairInstanceParser = (data: ContractEntriesResponse) => {
     if (!data.entryUpdateByContractId) {
       throw new Error("No entries provided")
