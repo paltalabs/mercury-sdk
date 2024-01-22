@@ -211,12 +211,6 @@ export class Mercury {
       console.log(response)
     })
     return response
-    const response = await this._backendRequest({ method: "POST", url: "/entry", body })
-    .catch((error: string)=>{
-      console.error(error)
-      console.log(response)
-    })
-    return response
   }
 
   /**
