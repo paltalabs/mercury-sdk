@@ -1,13 +1,5 @@
-/* 
-Crear una funcion que obtenga todos los pares desde factory:
-    -Para eso necesito una query de entryUpdateByContractId que
-    reciba como parametros contractId y durability, dentro de headers un JWT
 
-Obtener los datos de los pares,
- */
 import { Mercury } from "./Mercury";
-// import { getContractEventsParser } from "./utils/parsers/getContractEventsParser";
-
 import {
     factoryInstanceParser, pairInstanceParser
 } from "."
@@ -30,8 +22,9 @@ dotenv.config();
         password: process.env.MERCURY_TESTER_PASSWORD!,
     });
 
-     const routerContractAddress = "CDSUTAZNBTBAMG2SVZ63FRIBIJOEBSRVVR4GZ3TDXX25AHUN5N3ZYMYU";
+    const routerContractAddress = "CDSUTAZNBTBAMG2SVZ63FRIBIJOEBSRVVR4GZ3TDXX25AHUN5N3ZYMYU";
     const pairAddress = "CDYLINP2CX64S2YC4CCI44XH4H7K6Z2WB5UV3U33VIK36T7YATR2QTXP"
+    const nullAddress= "CAFQFTDI3TW4BIK3UCDWV5VWODDYIOSCBZPS3LUHXE5PAPFCJMXM4QRJ"
     const args = {
         contractId: routerContractAddress,
         keyXdr: "AAAFA==",
@@ -49,7 +42,6 @@ dotenv.config();
         const parsedEntries: ParsedRouterEntry[] = factoryInstanceParser(entries.data!)
         console.log(parsedEntries[1].AllPairs)
     }
-    const nullAddress= "CAFQFTDI3TW4BIK3UCDWV5VWODDYIOSCBZPS3LUHXE5PAPFCJMXM4QRJ"
     const pairContractArgs= {
         contractId: pairAddress,
     }
@@ -60,6 +52,6 @@ dotenv.config();
     })
     if(pairContractData && pairContractData.ok){
         const parsedContractData = pairInstanceParser(pairContractData.data)
-        console.log(parsedContractData[0].PairAddress)
+        console.log(parsedContractData)
     }
 })();
