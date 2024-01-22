@@ -9,9 +9,10 @@ import { Mercury } from "./Mercury";
 // import { getContractEventsParser } from "./utils/parsers/getContractEventsParser";
 
 import {
-    FactoryInstanceParser
+    factoryInstanceParser, pairInstanceParser
 } from "."
 import dotenv from "dotenv";
+import { ApiResponse, ParsedRouterEntry } from "./types";
 dotenv.config();
 
 (async function () {
@@ -30,7 +31,7 @@ dotenv.config();
     });
 
      const routerContractAddress = "CDSUTAZNBTBAMG2SVZ63FRIBIJOEBSRVVR4GZ3TDXX25AHUN5N3ZYMYU";
-    const pairAddress = "CADHF2DQJIH7LUQVZY7KIP4GBSHVICDQJNJPGSP4P4HWGXU76JILV6HP"
+    const pairAddress = "CDYLINP2CX64S2YC4CCI44XH4H7K6Z2WB5UV3U33VIK36T7YATR2QTXP"
     const args = {
         contractId: routerContractAddress,
         keyXdr: "AAAFA==",
@@ -40,23 +41,25 @@ dotenv.config();
         console.error(err)
     })
     console.log(subscribe) */
-/*     const entries: any = await mercuryInstance.getAllFactoryContract(args)
-    .catch((err) => {
+    const entries: ApiResponse<any> | void = await mercuryInstance.getContractEntries(args)
+    .catch((err: any) => {
         console.log(err)
     })
-    if(entries.ok){
-        const parsedEntries = factoryInstanceParser(entries.data!)
-    } */
-
-    const pairContractArgs= {
-        contractId: routerContractAddress,
+    if(entries && entries.ok){
+        const parsedEntries: ParsedRouterEntry[] = factoryInstanceParser(entries.data!)
+        console.log(parsedEntries[1].AllPairs)
     }
-    const pairContractData:any = await mercuryInstance.getContractEntries(pairContractArgs)
+    const nullAddress= "CAFQFTDI3TW4BIK3UCDWV5VWODDYIOSCBZPS3LUHXE5PAPFCJMXM4QRJ"
+    const pairContractArgs= {
+        contractId: pairAddress,
+    }
+    /*  console.log(pairContractArgs) */
+    const pairContractData: ApiResponse<any> | void = await mercuryInstance.getContractEntries(pairContractArgs)
     .catch((err) => {
         console.error(err)
     })
-    if(pairContractData.ok){
-        const parsedContractData = pairContractData.data
-        console.log(parsedContractData)
+    if(pairContractData && pairContractData.ok){
+        const parsedContractData = pairInstanceParser(pairContractData.data)
+        console.log(parsedContractData[0].PairAddress)
     }
 })();
