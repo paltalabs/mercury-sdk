@@ -3,6 +3,7 @@ export {
   SubscribeToFullAccountArgs,
   SubscribeToLedgerEntriesArgs,
   SubscribeToLedgerEntriesExpirationArgs,
+  SubscribeToMultipleLedgerEntriesArgs
 } from "./subscriptions";
 export { AuthenticateResponse } from "./authenticate";
 export {

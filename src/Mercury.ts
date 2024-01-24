@@ -17,7 +17,8 @@ import {
   GetContractEventsResponse,
   GetAllContractEventSubscriptionsResponse,
   GetAllFullAccountSubscriptionsResponse,
-  ContractEntriesResponse
+  ContractEntriesResponse,
+  SubscribeToMultipleLedgerEntriesArgs
 } from "./types";
 import { SubscribeToContractEventsArgs } from "./types/subscriptions";
 import { toSnakeCase } from "./utils";
@@ -201,7 +202,6 @@ export class Mercury {
    *   - maxSingleSize (optional): How much will one event cost at most (default: 2000)
    * @returns Subscription result.
    */
-  //TODO: Query multiple entries at once
   public async subscribeToLedgerEntries(args: SubscribeToLedgerEntriesArgs) {
     const body = this._createRequestBody(args, {
       maxSingleSize: this._defaultMaxSingleSize,
@@ -212,6 +212,22 @@ export class Mercury {
       console.log(response)
     })
     return response
+  }
+  
+  //TODO: subscribe multiple entries at once
+  public async subscribeToMultipleLedgerEntries(args: SubscribeToMultipleLedgerEntriesArgs) {
+    const results = []
+    for(let i = 0; i < args.contractId.length; i++){
+      const body = this._createRequestBody({
+        contractId: args.contractId[i],
+        keyXdr: args.keyXdr,
+        durability: args.durability,
+        maxSingleSize: this._defaultMaxSingleSize,
+      });
+      const response = await this._backendRequest({ method: "POST", url: "/entry", body })
+      results.push(response)
+    }
+    return results
   }
 
   /**

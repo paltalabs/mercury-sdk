@@ -14,6 +14,13 @@ export interface SubscribeToLedgerEntriesArgs {
   maxSingleSize?: number;
 }
 
+export interface SubscribeToMultipleLedgerEntriesArgs {
+  contractId: Array<string>;
+  keyXdr: string;
+  durability: string;
+  maxSingleSize?: number;
+}
+
 export interface SubscribeToLedgerEntriesExpirationArgs {
   hashXdr: string;
 }
