@@ -34,17 +34,21 @@ dotenv.config();
         console.error(err)
     })
     console.log(subscribe) */
-/*     const factoryEntries: ApiResponse<any> | void = await mercuryInstance.getContractEntries(args)
+    //getContractEntries demo factory case
+    const factoryEntries: ApiResponse<any> | void = await mercuryInstance.getContractEntries(args)
     .catch((err: any) => {
         console.log(err)
     })
+    let AllPairs: string[] = []
     if(factoryEntries && factoryEntries.ok){
         const parsedEntries: ParsedRouterEntry[] = factoryInstanceParser(factoryEntries.data)
-        console.log(parsedEntries[0].AllPairs)
+        //console.log(parsedEntries[0].AllPairs)
+        AllPairs = parsedEntries[0].AllPairs
     }
+    //getContractEntries demo pairs case
     const pairContractArgs= {
         contractId: pairAddress,
-    } */
+    }
     /*  console.log(pairContractArgs) */
 /*     const pairContractData: ApiResponse<any> | void = await mercuryInstance.getContractEntries(pairContractArgs)
     .catch((err) => {
@@ -54,7 +58,8 @@ dotenv.config();
         const parsedContractData = pairInstanceParser(pairContractData.data)
         console.log(parsedContractData)
     } */
-    const query1Args = {
+    //getCustomQuery demo
+   /*  const query1Args = {
         request: 
             `query MyQuery {
                 allLedgerEntrySubscriptions {
@@ -85,5 +90,15 @@ dotenv.config();
     const query1Response = await mercuryInstance.getCustomQuery(query1Args)
     console.log(query1Response.data)
     const query2Response = await mercuryInstance.getCustomQuery(query2Args)
-    console.log(query2Response.data)
+    console.log(query2Response.data) */
+    //subscribeToMultipleLedgerEntries demo
+    const pairsArray = [AllPairs[0], AllPairs[1], AllPairs[2], AllPairs[3], AllPairs[4]]
+    const multipleLedgerEntriesArgs = {
+        //TODO: get contractId from factory contract .AllPairs
+        contractId: pairsArray,
+        keyXdr: "AAAFA==",
+        durability: "persistent"
+    }
+    const multipleLedgerEntriesResponse = await mercuryInstance.subscribeToMultipleLedgerEntries(multipleLedgerEntriesArgs)
+    console.log('response',multipleLedgerEntriesResponse)
 })();
