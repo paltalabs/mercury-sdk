@@ -34,7 +34,7 @@ dotenv.config();
         console.error(err)
     })
     console.log(subscribe) */
-    const factoryEntries: ApiResponse<any> | void = await mercuryInstance.getContractEntries(args)
+/*     const factoryEntries: ApiResponse<any> | void = await mercuryInstance.getContractEntries(args)
     .catch((err: any) => {
         console.log(err)
     })
@@ -44,14 +44,46 @@ dotenv.config();
     }
     const pairContractArgs= {
         contractId: pairAddress,
-    }
+    } */
     /*  console.log(pairContractArgs) */
-    const pairContractData: ApiResponse<any> | void = await mercuryInstance.getContractEntries(pairContractArgs)
+/*     const pairContractData: ApiResponse<any> | void = await mercuryInstance.getContractEntries(pairContractArgs)
     .catch((err) => {
         console.error(err)
     })
     if(pairContractData && pairContractData.ok){
         const parsedContractData = pairInstanceParser(pairContractData.data)
         console.log(parsedContractData)
+    } */
+    const query1Args = {
+        request: 
+            `query MyQuery {
+                allLedgerEntrySubscriptions {
+                  edges {
+                    node {
+                      id
+                    }
+                  }
+                }
+              }`,
     }
+    const query2Args = {
+        request: 
+            `query MyQuery($contractId: String!) {
+                entryUpdateByContractId(contract: $contractId) {
+                  edges {
+                    node {
+                      keyXdr
+                      valueXdr
+                    }
+                  }
+                }
+              }`,
+        variables: {
+            contractId: factoryAddress
+        }
+    }
+    const query1Response = await mercuryInstance.getCustomQuery(query1Args)
+    console.log(query1Response.data)
+    const query2Response = await mercuryInstance.getCustomQuery(query2Args)
+    console.log(query2Response.data)
 })();
