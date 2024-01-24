@@ -214,7 +214,12 @@ export class Mercury {
     return response
   }
   
-  //TODO: subscribe multiple entries at once
+  /**
+   * Subscribes to multiple ledger entries.
+   * 
+   * @param args - The arguments for subscribing to multiple ledger entries.
+   * @returns An array of results for each subscribed ledger entry.
+   */
   public async subscribeToMultipleLedgerEntries(args: SubscribeToMultipleLedgerEntriesArgs) {
     const results = []
     for(let i = 0; i < args.contractId.length; i++){
