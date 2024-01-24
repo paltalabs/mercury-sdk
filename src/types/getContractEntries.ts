@@ -16,11 +16,11 @@ export interface Node {
 }
 
 export interface ParsedRouterEntry {
-  FeeTo: string;
-  FeeToSetter: string;
-  AllPairs: string[];
-  PairsMapping: PairMapping;
-  PairWasmHash: string;
+  feeTo: string;
+  feeToSetter: string;
+  allPairs: string[];
+  pairsMapping: PairMapping;
+  pairWasmHash: string;
 }
 
 export interface PairMapping {

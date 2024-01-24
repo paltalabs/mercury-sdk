@@ -39,12 +39,14 @@ dotenv.config();
     .catch((err: any) => {
         console.log(err)
     })
-    let AllPairs: string[] = []
+    let allPairs: string[] = []
     if(factoryEntries && factoryEntries.ok){
         const parsedEntries: ParsedRouterEntry[] = factoryInstanceParser(factoryEntries.data)
-        //console.log(parsedEntries[0].AllPairs)
-        AllPairs = parsedEntries[0].AllPairs
+        //console.log(parsedEntries[0].allPairs)
+        console.log(parsedEntries[0])
+        allPairs = parsedEntries[0].allPairs
     }
+    console.log(allPairs)
     //getContractEntries demo pairs case
     const pairContractArgs= {
         contractId: pairAddress,
@@ -92,13 +94,21 @@ dotenv.config();
     const query2Response = await mercuryInstance.getCustomQuery(query2Args)
     console.log(query2Response.data) */
     //subscribeToMultipleLedgerEntries demo
-    const pairsArray = [AllPairs[0], AllPairs[1], AllPairs[2], AllPairs[3], AllPairs[4]]
+    const pairsArray = [allPairs[0], allPairs[1], allPairs[2], allPairs[3], allPairs[4]]
     const multipleLedgerEntriesArgs = {
-        //TODO: get contractId from factory contract .AllPairs
+        //TODO: get contractId from factory contract .allPairs
         contractId: pairsArray,
-        keyXdr: "AAAFA==",
+        keyXdr: "AAAAFA==",
         durability: "persistent"
     }
     const multipleLedgerEntriesResponse = await mercuryInstance.subscribeToMultipleLedgerEntries(multipleLedgerEntriesArgs)
     console.log('response',multipleLedgerEntriesResponse)
+    const oneSubEntriesArgs = {
+        //TODO: get contractId from factory contract .allPairs
+        contractId: factoryAddress,
+        keyXdr: "AAAAFA==",
+        durability: "persistent"
+    }
+    const oneSub = await mercuryInstance.subscribeToLedgerEntries(oneSubEntriesArgs)
+    console.log('oneSub',oneSub)
 })();

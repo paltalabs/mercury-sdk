@@ -6,14 +6,14 @@ import * as StellarSdk from "@stellar/stellar-sdk";
  * Enum representing the key names for pair instance properties.
  */
 enum keyNames {
-    Token0 = 0,         // address public token0;
-    Token1 = 1,         // address public token1;
-    Reserve0 = 2,       // uint112 private reserve0;
-    Reserve1 = 3,       // uint112 private reserve1;
-    FactoryAddress = 4, // address public factory; 
-    TotalShares = 5,    // TotalShares;
-    PairToken = 6,      // liquidity pool token:
-    PairAddress = 7,    // PairAddress;
+    token0 = 0,         // address public token0;
+    token1 = 1,         // address public token1;
+    reserve0 = 2,       // uint112 private reserve0;
+    reserve1 = 3,       // uint112 private reserve1;
+    factoryAddress = 4, // address public factory; 
+    totalShares = 5,    // TotalShares;
+    pairToken = 6,      // liquidity pool token:
+    pairAddress = 7,    // PairAddress;
 }
 
 /**

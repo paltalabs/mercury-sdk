@@ -5,12 +5,12 @@ import * as StellarSdk from "@stellar/stellar-sdk";
  * Enum representing the keys for data in the factory instance.
  */
 enum DataKey {
-  FeeTo = 0,        // address public feeTo;
-  FeeToSetter = 1,  // address public feeToSetter;
-  AllPairs = 2,     //  address[] public allPairs;
-  PairsMapping = 3, // Map of pairs
-  PairWasmHash = 4,
-  FeesEnabled = 5,  // bool is taking fees?
+  feeTo = 0,        // address public feeTo;
+  feeToSetter = 1,  // address public feeToSetter;
+  allPairs = 2,     //  address[] public allPairs;
+  pairsMapping = 3, // Map of pairs
+  pairWasmHash = 4,
+  feesEnabled = 5,  // bool is taking fees?
 }
 
 /**
