@@ -201,6 +201,7 @@ export class Mercury {
    *   - maxSingleSize (optional): How much will one event cost at most (default: 2000)
    * @returns Subscription result.
    */
+  //TODO: Query multiple entries at once
   public async subscribeToLedgerEntries(args: SubscribeToLedgerEntriesArgs) {
     const body = this._createRequestBody(args, {
       maxSingleSize: this._defaultMaxSingleSize,
@@ -387,6 +388,20 @@ export class Mercury {
       body: {
         request: QUERIES.GET_CONTRACT_ENTRIES,
         variables: args,
+      },
+    });
+  }
+
+  /**
+   * Executes a custom GrapihQL query.
+   * @param args - The query request and optional variables.
+   * @returns A promise that resolves to the result of the query.
+   */
+  public async getCustomQuery(args: { request: string; variables?: any; }) {
+    return this._graphqlRequest({
+      body: {
+        request: QUERIES.getCustomQuery(args.request),
+        variables: args.variables,
       },
     });
   }

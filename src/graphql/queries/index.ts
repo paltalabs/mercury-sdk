@@ -8,3 +8,4 @@ export { GET_PATH_PAYMENTS_STRICT_SEND_BY_PUBLIC_KEY } from "./getPathPaymentsSt
 export { GET_RECEIVED_PAYMENTS } from "./getReceivedPayments";
 export { GET_SENT_PAYMENTS } from "./getSentPayments";
 export { GET_CONTRACT_ENTRIES } from "./getContractEntries";
+export { getCustomQuery } from "./customQuery";
