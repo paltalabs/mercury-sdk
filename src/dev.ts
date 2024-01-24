@@ -34,6 +34,7 @@ dotenv.config();
         console.error(err)
     })
     console.log(subscribe) */
+    
     //getContractEntries demo factory case
     const factoryEntries: ApiResponse<any> | void = await mercuryInstance.getContractEntries(args)
     .catch((err: any) => {
@@ -47,6 +48,7 @@ dotenv.config();
         allPairs = parsedEntries[0].allPairs
     }
     console.log(allPairs)
+
     //getContractEntries demo pairs case
     const pairContractArgs= {
         contractId: pairAddress,
@@ -60,6 +62,7 @@ dotenv.config();
         const parsedContractData = pairInstanceParser(pairContractData.data)
         console.log(parsedContractData)
     } */
+
     //getCustomQuery demo
    /*  const query1Args = {
         request: 
@@ -93,22 +96,14 @@ dotenv.config();
     console.log(query1Response.data)
     const query2Response = await mercuryInstance.getCustomQuery(query2Args)
     console.log(query2Response.data) */
+
     //subscribeToMultipleLedgerEntries demo
     const pairsArray = [allPairs[0], allPairs[1], allPairs[2], allPairs[3], allPairs[4]]
     const multipleLedgerEntriesArgs = {
-        //TODO: get contractId from factory contract .allPairs
         contractId: pairsArray,
         keyXdr: "AAAAFA==",
         durability: "persistent"
     }
     const multipleLedgerEntriesResponse = await mercuryInstance.subscribeToMultipleLedgerEntries(multipleLedgerEntriesArgs)
     console.log('response',multipleLedgerEntriesResponse)
-    const oneSubEntriesArgs = {
-        //TODO: get contractId from factory contract .allPairs
-        contractId: factoryAddress,
-        keyXdr: "AAAAFA==",
-        durability: "persistent"
-    }
-    const oneSub = await mercuryInstance.subscribeToLedgerEntries(oneSubEntriesArgs)
-    console.log('oneSub',oneSub)
 })();
