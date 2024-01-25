@@ -27,7 +27,7 @@ dotenv.config();
     const nullAddress= "CAFQFTDI3TW4BIK3UCDWV5VWODDYIOSCBZPS3LUHXE5PAPFCJMXM4QRJ"
     const args = {
         contractId: factoryAddress,
-        keyXdr: "AAAFA==",
+        keyXdr: "AAAAFA==",
         durability: "persistent"
     }
 /*     const subscribe = await mercuryInstance.subscribeToLedgerEntries(args).catch((err) => {
@@ -44,11 +44,8 @@ dotenv.config();
     if(factoryEntries && factoryEntries.ok){
         const parsedEntries: ParsedRouterEntry[] = factoryInstanceParser(factoryEntries.data)
         //console.log(parsedEntries[0].allPairs)
-        console.log(parsedEntries[0])
         allPairs = parsedEntries[0].allPairs
     }
-    console.log(allPairs)
-
     //getContractEntries demo pairs case
     const pairContractArgs= {
         contractId: pairAddress,
@@ -105,5 +102,10 @@ dotenv.config();
         durability: "persistent"
     }
     const multipleLedgerEntriesResponse = await mercuryInstance.subscribeToMultipleLedgerEntries(multipleLedgerEntriesArgs)
-    console.log('response',multipleLedgerEntriesResponse)
+    console.log('Subscribe various ledgers responseonse',multipleLedgerEntriesResponse)
+    
+    const subscribeLedgerEntriesResponse = await mercuryInstance.subscribeToLedgerEntries(args)
+    if (subscribeLedgerEntriesResponse && subscribeLedgerEntriesResponse.data) {
+        console.log('Subscribe one ledger response:', subscribeLedgerEntriesResponse)
+    }
 })();

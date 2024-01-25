@@ -197,14 +197,14 @@ export class Mercury {
    *   - contractId: ID of the contract.
    *   - keyXdr: Entry key as base64 xdr.
    *   - durability: Durability of the entry.
-   *   - keyXdr: Entry key as base64 xdr.
-   *   - durability: Durability of the entry.
    *   - maxSingleSize (optional): How much will one event cost at most (default: 2000)
    * @returns Subscription result.
    */
   public async subscribeToLedgerEntries(args: SubscribeToLedgerEntriesArgs) {
     const body = this._createRequestBody(args, {
       maxSingleSize: this._defaultMaxSingleSize,
+      durability: args.durability,
+      keyXdr: args.keyXdr,
     });
     const response = await this._backendRequest({ method: "POST", url: "/entry", body })
     .catch((error: string)=>{
