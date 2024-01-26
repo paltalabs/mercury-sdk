@@ -37,6 +37,20 @@ mercuryInstance.subscribeToFullAccount({
 });
 ```
 
+Subscribe to ledger entries:
+
+```typescript
+const contractAddress = "CDSUTAZNBTBAMG2SVZ63FRIBIJOEBSRVVR4GZ3TDXX25AHUN5N3ZYMYU";
+const args = {
+    contractId: contractAddress,
+    keyXdr: "AAAAFA==",
+    durability: "persistent"
+}
+const subscribe = await mercuryInstance.subscribeToLedgerEntries(args).catch((err) => {
+    console.error(err)
+})
+```
+
 Review subscriptions:
 
 ```typescript
