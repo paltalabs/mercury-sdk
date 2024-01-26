@@ -3,6 +3,7 @@ export {
   SubscribeToFullAccountArgs,
   SubscribeToLedgerEntriesArgs,
   SubscribeToLedgerEntriesExpirationArgs,
+  SubscribeToMultipleLedgerEntriesArgs
 } from "./subscriptions";
 export { AuthenticateResponse } from "./authenticate";
 export {
@@ -21,3 +22,5 @@ export {
 export { GetContractEventsResponse } from "./getContractEvents";
 export { GetAllContractEventSubscriptionsResponse } from "./getAllContractEventSubscriptions";
 export { GetAllFullAccountSubscriptionsResponse } from "./getAllFullAccountSubscriptions";
+export { ContractEntriesResponse, ParsedRouterEntry } from "./getContractEntries";
+export { PairEntry } from "./pairEntry";

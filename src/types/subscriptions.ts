@@ -10,6 +10,14 @@ export interface SubscribeToContractEventsArgs {
 export interface SubscribeToLedgerEntriesArgs {
   contractId: string;
   keyXdr: string;
+  durability: string;
+  maxSingleSize?: number;
+}
+
+export interface SubscribeToMultipleLedgerEntriesArgs {
+  contractId: Array<string>;
+  keyXdr: string;
+  durability: string;
   maxSingleSize?: number;
 }
 

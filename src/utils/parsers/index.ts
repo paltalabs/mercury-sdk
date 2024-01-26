@@ -5,3 +5,5 @@ export { getPathPaymentsStrictReceiveParser } from "./getPathPaymentsStrictRecei
 export { getPathPaymentsStrictSendParser } from "./getPathPaymentsStrictSendParser";
 export { getReceivedPaymentsParser } from "./getReceivedPaymentsParser";
 export { getSentPaymentsParser } from "./getSentPaymentsParser";
+export { factoryInstanceParser } from "./factoryInstanceParser";
+export { pairInstanceParser } from "./pairInstanceParser";

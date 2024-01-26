@@ -17,6 +17,8 @@ import {
   GetContractEventsResponse,
   GetAllContractEventSubscriptionsResponse,
   GetAllFullAccountSubscriptionsResponse,
+  ContractEntriesResponse,
+  SubscribeToMultipleLedgerEntriesArgs
 } from "./types";
 import { SubscribeToContractEventsArgs } from "./types/subscriptions";
 import { toSnakeCase } from "./utils";
@@ -193,15 +195,44 @@ export class Mercury {
    * Create a new subscription to a ledger entry. This is especially useful in scenarios where events alone don't give you enough context.
    * @param args Arguments for the subscription:
    *   - contractId: ID of the contract.
-   *   - keyXdr: Entry key as base64 xdr
+   *   - keyXdr: Entry key as base64 xdr.
+   *   - durability: Durability of the entry.
    *   - maxSingleSize (optional): How much will one event cost at most (default: 2000)
    * @returns Subscription result.
    */
   public async subscribeToLedgerEntries(args: SubscribeToLedgerEntriesArgs) {
     const body = this._createRequestBody(args, {
       maxSingleSize: this._defaultMaxSingleSize,
+      durability: args.durability,
+      keyXdr: args.keyXdr,
     });
-    return this._backendRequest({ method: "POST", url: "/entry", body });
+    const response = await this._backendRequest({ method: "POST", url: "/entry", body })
+    .catch((error: string)=>{
+      console.error(error)
+      console.log(response)
+    })
+    return response
+  }
+  
+  /**
+   * Subscribes to multiple ledger entries.
+   * 
+   * @param args - The arguments for subscribing to multiple ledger entries.
+   * @returns An array of results for each subscribed ledger entry.
+   */
+  public async subscribeToMultipleLedgerEntries(args: SubscribeToMultipleLedgerEntriesArgs) {
+    const results = []
+    for(let i = 0; i < args.contractId.length; i++){
+      const body = this._createRequestBody({
+        contractId: args.contractId[i],
+        keyXdr: args.keyXdr,
+        durability: args.durability,
+        maxSingleSize: this._defaultMaxSingleSize,
+      });
+      const response = await this._backendRequest({ method: "POST", url: "/entry", body })
+      results.push(response)
+    }
+    return results
   }
 
   /**
@@ -363,6 +394,35 @@ export class Mercury {
       body: {
         request: QUERIES.GET_CONTRACT_EVENTS,
         variables: args,
+      },
+    });
+  }
+
+  /**
+   * Retrieves all factory contract data based on the provided contract ID.
+   * @param args - The arguments for the request.
+   * @param args.contractId - The ID of the factory contract.
+   * @returns A promise that resolves to the response containing the factory contract data.
+   */
+  public async getContractEntries(args: { contractId: string }) {
+    return this._graphqlRequest<ContractEntriesResponse>({
+      body: {
+        request: QUERIES.GET_CONTRACT_ENTRIES,
+        variables: args,
+      },
+    });
+  }
+
+  /**
+   * Executes a custom GrapihQL query.
+   * @param args - The query request and optional variables.
+   * @returns A promise that resolves to the result of the query.
+   */
+  public async getCustomQuery(args: { request: string; variables?: any; }) {
+    return this._graphqlRequest({
+      body: {
+        request: QUERIES.getCustomQuery(args.request),
+        variables: args.variables,
       },
     });
   }
