@@ -12,6 +12,7 @@ export interface SubscribeToLedgerEntriesArgs {
   keyXdr: string;
   durability: string;
   maxSingleSize?: number;
+  hydrate?: boolean;
 }
 
 export interface SubscribeToMultipleLedgerEntriesArgs {
@@ -19,6 +20,7 @@ export interface SubscribeToMultipleLedgerEntriesArgs {
   keyXdr: string;
   durability: string;
   maxSingleSize?: number;
+  hydrate?: boolean;
 }
 
 export interface SubscribeToLedgerEntriesExpirationArgs {

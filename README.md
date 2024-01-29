@@ -44,7 +44,8 @@ const contractAddress = "CDSUTAZNBTBAMG2SVZ63FRIBIJOEBSRVVR4GZ3TDXX25AHUN5N3ZYMY
 const args = {
     contractId: contractAddress,
     keyXdr: "AAAAFA==",
-    durability: "persistent"
+    durability: "persistent",
+    hydrate: true,
 }
 const subscribe = await mercuryInstance.subscribeToLedgerEntries(args).catch((err) => {
     console.error(err)
@@ -246,3 +247,8 @@ yarn tsc
 ```
 
 This will compile typescript into the folder `dist/` where other projects will look for the code.
+
+## Publish a new version
+
+Make sure you have setup the npm token in your environment variables.
+Run `yarn publish` and follow the instructions.

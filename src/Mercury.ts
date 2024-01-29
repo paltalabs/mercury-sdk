@@ -205,6 +205,7 @@ export class Mercury {
       maxSingleSize: this._defaultMaxSingleSize,
       durability: args.durability,
       keyXdr: args.keyXdr,
+      hydrate: args.hydrate?? true,
     });
     const response = await this._backendRequest({ method: "POST", url: "/entry", body })
     .catch((error: string)=>{
