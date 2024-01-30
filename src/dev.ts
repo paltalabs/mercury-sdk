@@ -31,7 +31,7 @@ dotenv.config();
         durability: "persistent",
         hydrate: true,
     }
-    const subscribe = await mercuryInstance.subscribeToLedgerEntries(args).catch((err) => {
+/*     const subscribe = await mercuryInstance.subscribeToLedgerEntries(args).catch((err) => {
         console.error(err)
     })
     console.log(subscribe)
@@ -50,7 +50,7 @@ dotenv.config();
     //getContractEntries demo pairs case
     const pairContractArgs= {
         contractId: pairAddress,
-    }
+    } */
     /*  console.log(pairContractArgs) */
 /*     const pairContractData: ApiResponse<any> | void = await mercuryInstance.getContractEntries(pairContractArgs)
     .catch((err) => {
