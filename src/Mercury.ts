@@ -210,7 +210,6 @@ export class Mercury {
     const response = await this._backendRequest({ method: "POST", url: "/entry", body })
     .catch((error: string)=>{
       console.error(error)
-      console.log(response)
     })
     return response
   }
@@ -228,7 +227,7 @@ export class Mercury {
         contractId: args.contractId[i],
         keyXdr: args.keyXdr,
         durability: args.durability,
-        maxSingleSize: this._defaultMaxSingleSize,
+        hydrate: args.hydrate?? true,
       });
       const response = await this._backendRequest({ method: "POST", url: "/entry", body })
       results.push(response)
