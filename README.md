@@ -1,5 +1,7 @@
 # mercury-sdk
 
+Generate docs: `yarn docs`
+
 ## Usage
 
 ### Instantiate

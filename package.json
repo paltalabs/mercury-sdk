@@ -19,7 +19,8 @@
   "scripts": {
     "build": "tsc",
     "start:example": "ts-node src/example.ts",
-    "dev": "ts-node src/dev.ts"
+    "dev": "ts-node src/dev.ts",
+    "doc": "typedoc src/"
   },
   "dependencies": {
     "@stellar/stellar-sdk": "^11.1.0",
@@ -33,6 +34,7 @@
   "devDependencies": {
     "@types/node": "^20.10.0",
     "cpy-cli": "^5.0.0",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "typedoc": "^0.25.7"
   }
 }
