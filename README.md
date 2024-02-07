@@ -1,6 +1,7 @@
 # mercury-sdk
 
 Generate docs: `yarn docs`
+Package available in: https://www.npmjs.com/package/mercury-sdk
 
 ## Usage
 
