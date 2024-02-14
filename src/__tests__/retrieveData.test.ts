@@ -18,7 +18,7 @@ const testnetAccount = [
     },
 ]
 
-test('it should retrieve sent payments as an array', async ()=>{
+test('Should retrieve sent payments as an array', async ()=>{
     const mercury = new Mercury(mercuryOptions);
     const payments = await mercury.getSentPayments({publicKey: testnetAccount[0].publicKey});
     expect(payments).toBeDefined();
@@ -77,5 +77,5 @@ test('Should get contract events as an array', async () => {
     const contractEvents = await mercuryInstance.getContractEvents({ contractId });
     expect(contractEvents).toBeDefined();
     expect(contractEvents.ok).toBe(true);
-    expect(contractEvents.data?.eventByContractId.edges).toBeDefined();
+    expect(contractEvents.data?.eventByContractId.nodes).toBeDefined();
   });
