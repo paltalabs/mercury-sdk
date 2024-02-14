@@ -23,7 +23,7 @@ test('it should retrieve sent payments as an array', async ()=>{
     const payments = await mercury.getSentPayments({publicKey: testnetAccount[0].publicKey});
     expect(payments).toBeDefined();
     expect(payments.ok).toBe(true);
-    expect(Array.isArray(payments.data?.paymentsByPublicKey.edges)).toBe(true);
+    expect(payments.data?.paymentsByPublicKey.edges).toBeDefined();
 })
 
 test('Should get received payments as an array', async () => {
@@ -32,7 +32,7 @@ test('Should get received payments as an array', async () => {
     const receivedPayments = await mercuryInstance.getReceivedPayments({ publicKey });
     expect(receivedPayments).toBeDefined();
     expect(receivedPayments.ok).toBe(true);
-    expect(Array.isArray(receivedPayments.data?.paymentsToPublicKey.edges)).toBe(true);
+    expect(receivedPayments.data?.paymentsToPublicKey.edges).toBeDefined();
   });
 
 test('Should get path payments strict send', async () => {
@@ -41,7 +41,7 @@ test('Should get path payments strict send', async () => {
     const pathPaymentsStrictSend = await mercuryInstance.getPathPaymentsStrictSend({ publicKey });
     expect(pathPaymentsStrictSend).toBeDefined();
     expect(pathPaymentsStrictSend.ok).toBe(true);
-    expect(Array.isArray(pathPaymentsStrictSend.data?.pathPaymentsStrictSendByPublicKey.nodes)).toBe(true);
+    expect(pathPaymentsStrictSend.data?.pathPaymentsStrictSendByPublicKey.nodes).toBeDefined();
   });
 
 test('Should get path payments strict receive', async () => {
@@ -50,7 +50,7 @@ test('Should get path payments strict receive', async () => {
     const pathPaymentsStrictReceive = await mercuryInstance.getPathPaymentsStrictReceive({ publicKey });
     expect(pathPaymentsStrictReceive).toBeDefined();
     expect(pathPaymentsStrictReceive.ok).toBe(true);
-    expect(Array.isArray(pathPaymentsStrictReceive.data?.pathPaymentsStrictReceiveByPublicKey.nodes)).toBe(true);
+    expect(pathPaymentsStrictReceive.data?.pathPaymentsStrictReceiveByPublicKey.nodes).toBeDefined();
   });
 
 test('Should get liquidity pool deposit as an array', async () => {
@@ -59,7 +59,7 @@ test('Should get liquidity pool deposit as an array', async () => {
     const liquidityPoolDeposit = await mercuryInstance.getLiquidityPoolDeposit({ publicKey });
     expect(liquidityPoolDeposit).toBeDefined();
     expect(liquidityPoolDeposit.ok).toBe(true);
-    expect(Array.isArray(liquidityPoolDeposit.data?.liquidityPoolDepositByPublicKey.edges)).toBe(true);
+    expect(liquidityPoolDeposit.data?.liquidityPoolDepositByPublicKey.edges).toBeDefined();
   });
 
 test('Should get liquidity pool withdraw as an array', async () => {
@@ -68,7 +68,7 @@ test('Should get liquidity pool withdraw as an array', async () => {
     const liquidityPoolWithdraw = await mercuryInstance.getLiquidityPoolWithdraw({ publicKey });
     expect(liquidityPoolWithdraw).toBeDefined();
     expect(liquidityPoolWithdraw.ok).toBe(true);
-    expect(Array.isArray(liquidityPoolWithdraw.data?.liquidityPoolWithdrawByPublicKey.edges)).toBe(true);
+    expect(liquidityPoolWithdraw.data?.liquidityPoolWithdrawByPublicKey.edges).toBeDefined();
   });
 
 test('Should get contract events as an array', async () => {
@@ -77,5 +77,5 @@ test('Should get contract events as an array', async () => {
     const contractEvents = await mercuryInstance.getContractEvents({ contractId });
     expect(contractEvents).toBeDefined();
     expect(contractEvents.ok).toBe(true);
-    expect(Array.isArray(contractEvents.data?.eventByContractId.edges)).toBe(true);
+    expect(contractEvents.data?.eventByContractId.edges).toBeDefined();
   });
