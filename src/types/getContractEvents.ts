@@ -3,11 +3,7 @@ export interface GetContractEventsResponse {
 }
 
 export interface EventByContractID {
-  edges: Edge[];
-}
-
-export interface Edge {
-  node: Node;
+  nodes: Node[];
 }
 
 export interface Node {

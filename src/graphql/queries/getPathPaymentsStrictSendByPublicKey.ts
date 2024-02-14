@@ -4,9 +4,15 @@ export const GET_PATH_PAYMENTS_STRICT_SEND_BY_PUBLIC_KEY = gql`
   query FullQuery($publicKey: String!) {
     pathPaymentsStrictSendByPublicKey(publicKeyText: $publicKey) {
       nodes {
-        ledgerByLedger {
-          closeTime
-          sequence
+        txInfoByTx {
+          ledgerByLedger {
+            closeTime
+            sequence
+          }
+          memo
+          txHash
+          opCount
+          fee
         }
         accountBySource {
           publickey
