@@ -89,18 +89,22 @@ export class Mercury {
 
   /**
    * Generic method to make a backend request.
-   * @param method HTTP method (GET, POST, PUT, DELETE).
-   * @param url Endpoint URL.
-   * @param body Request body.
-   * @param updateToken Whether to update the access token when calling the request or not.
+   * @param args Object containing the following properties:
+   * - method HTTP method (GET, POST, PUT, DELETE).
+   * - url Endpoint URL.
+   * - body Request body.
+   * - updateToken Whether to update the access token when calling the request or not.
    * @returns ApiResponse with data or error information.
    */
-  private async _backendRequest<T = any>({
-    method,
-    body,
-    url,
-    updateToken = this._updateTokenOnRequest,
-  }: backendRequestArgs): Promise<ApiResponse<T>> {
+  private async _backendRequest<T = any>(
+    args: backendRequestArgs
+  ): Promise<ApiResponse<T>> {
+    const {
+      method,
+      body,
+      url,
+      updateToken = this._updateTokenOnRequest,
+    } = args;
     try {
       if (updateToken) {
         await this.updateAccessToken();
@@ -125,18 +129,18 @@ export class Mercury {
 
   /**
    * Generic method to make a graphql request.
-   * @param body Request body.
-   *  - request: GraphQL request.
-   *  - variables: GraphQL variables.
-   * @param updateToken Whether to update the access token when calling the request or not.
-   * @param headers Request headers.
+   * @param args Object containing the following properties:
+   *  - body: Request body.
+   *    - request: GraphQL request.
+   *    - variables: GraphQL variables.
+   *  - updateToken: Whether to update the access token when calling the request or not.
+   *  - headers: Request headers.
    * @returns ApiResponse with data or error information.
    */
-  private async _graphqlRequest<T = any>({
-    body,
-    headers,
-    updateToken = this._updateTokenOnRequest,
-  }: GraphQLRequestArgs): Promise<ApiResponse<T>> {
+  private async _graphqlRequest<T = any>(
+    args: GraphQLRequestArgs
+  ): Promise<ApiResponse<T>> {
+    const { body, headers, updateToken = this._updateTokenOnRequest } = args;
     try {
       if (updateToken) {
         await this.updateAccessToken();
@@ -209,14 +213,14 @@ export class Mercury {
     });
     const response = await this._backendRequest({ method: "POST", url: "/entry", body })
     .catch((error: string)=>{
-      console.error(error)
+    console.error(error)
     })
     return response
   }
-  
+
   /**
    * Subscribes to multiple ledger entries.
-   * 
+   *
    * @param args - The arguments for subscribing to multiple ledger entries.
    * @returns An array of results for each subscribed ledger entry.
    */
