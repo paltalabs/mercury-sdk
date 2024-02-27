@@ -1,0 +1,14 @@
+{
+    "testnet": {
+        "factoryAddress": "CDW5FJFWONTIZ3TBARC6SQFXG3HLIBAJGNI5VAWIWXW6BJ3NPSD2PGZ4",
+        "testnetAccounts": [
+            {
+                "publicKey": "GDAB63MZKYO6656X3PEDEG77AUDB726MPBHZZ3ZEK2EV4S5SFTBRWRG4",
+                "secretKey": "SBFTST76GA234AZDDENXNO5SUBS5PA6WNH647X5KPJZNKWXF543WLWBT"
+            },
+            {
+                "publicKey": "GAASGCKKVBWAG5IREROZBLCIP7V2WO2IIE5PPWZOJARZ4GFHWCTPHR7J",
+                "secretKey": "SC4L22VGZ7LARNAMVZHBTPSKY6VJSQENAUMW35NRSYWCAEGAJFMTPERJ"
+            }
+        ]}
+}
