@@ -1,5 +1,5 @@
 import { Mercury } from "../Mercury";
-
+import * as testConfig from './testConfig.json';
 const mercuryOptions = {
     backendEndpoint: process.env.MERCURY_BACKEND_ENDPOINT!,
     graphqlEndpoint: process.env.MERCURY_GRAPHQL_ENDPOINT!,
@@ -33,9 +33,8 @@ interface allFullAccountSubscriptionsResponse {
 const mercuryInstance = new Mercury(mercuryOptions);
 
 test("Should subscribe to conract events successfully", async () => {
-    const factoryAddress = "CC4UOWU7HWS44WM5VEU4JWG6FMRKBREFQMWNQLYH6TLM7IY6NPASW5OM";
     const args = {
-        contractId: factoryAddress,
+        contractId: testConfig.testnet.factoryAddress,
     }
     const subscribe: SubscribeToContractEventsResponse = await mercuryInstance.subscribeToContractEvents(args).catch((err) => {
         console.error(err);
@@ -59,9 +58,8 @@ test("Should subscribe to a stellar account successfully", async () => {
 }, 10000);
 
 test("Should subscribe to ledger entries successfully", async () => {
-    const factoryAddress = "CC4UOWU7HWS44WM5VEU4JWG6FMRKBREFQMWNQLYH6TLM7IY6NPASW5OM";
     const args = {
-        contractId: factoryAddress,
+        contractId: testConfig.testnet.factoryAddress,
         keyXdr: "AAAAFA==",
         durability: "persistent",
         hydrate: true,

@@ -1,22 +1,12 @@
 import { Mercury } from "../Mercury";
+import * as testConfig from './testConfig.json';
 const mercuryOptions = {
     backendEndpoint: process.env.MERCURY_BACKEND_ENDPOINT!,
     graphqlEndpoint: process.env.MERCURY_GRAPHQL_ENDPOINT!,
     email: process.env.MERCURY_TESTER_EMAIL!,
     password: process.env.MERCURY_TESTER_PASSWORD!,
 };
-const testnetAccount = [
-    {
-        // account 1
-        publicKey: 'GAALDIAGTB2IVBBEDDH63DM24WUHSI5R5EKXA4XR25OGPRAD6SXFPIL3',
-        secretKey: 'SC7H2ZUCRVNB6ASWYVD6TE6KBY5FW3CDYRGIEWR4NBHD6FP3ICZW5A3Q',
-    },
-    {
-        // account 2
-        publicKey: 'GDQOERLYYOGW7F76WYBR5X4XLQPGZVBM5DGXOAAV33EPE6XJ7MUFMVSF',
-        secretKey: 'SAMR4UNRZSIO6W7URK2ADIG6GXKX6KUWRUA4BDG4O7E7KOINTOUXDPKK',
-    },
-]
+const testnetAccount = testConfig.testnet.testnetAccounts;
 
 test('Should retrieve sent payments as an array', async ()=>{
     const mercury = new Mercury(mercuryOptions);
@@ -24,7 +14,7 @@ test('Should retrieve sent payments as an array', async ()=>{
     expect(payments).toBeDefined();
     expect(payments.ok).toBe(true);
     expect(payments.data?.paymentsByPublicKey.edges).toBeDefined();
-})
+}, 10000);
 
 test('Should get received payments as an array', async () => {
     const publicKey = testnetAccount[0].publicKey;
@@ -33,7 +23,7 @@ test('Should get received payments as an array', async () => {
     expect(receivedPayments).toBeDefined();
     expect(receivedPayments.ok).toBe(true);
     expect(receivedPayments.data?.paymentsToPublicKey.edges).toBeDefined();
-  });
+  }, 10000);
 
 test('Should get path payments strict send', async () => {
     const publicKey = testnetAccount[0].publicKey;
@@ -42,7 +32,7 @@ test('Should get path payments strict send', async () => {
     expect(pathPaymentsStrictSend).toBeDefined();
     expect(pathPaymentsStrictSend.ok).toBe(true);
     expect(pathPaymentsStrictSend.data?.pathPaymentsStrictSendByPublicKey.nodes).toBeDefined();
-  });
+  }, 10000);
 
 test('Should get path payments strict receive', async () => {
     const publicKey = testnetAccount[0].publicKey;
@@ -51,7 +41,7 @@ test('Should get path payments strict receive', async () => {
     expect(pathPaymentsStrictReceive).toBeDefined();
     expect(pathPaymentsStrictReceive.ok).toBe(true);
     expect(pathPaymentsStrictReceive.data?.pathPaymentsStrictReceiveByPublicKey.nodes).toBeDefined();
-  });
+  }, 10000);
 
 test('Should get liquidity pool deposit as an array', async () => {
     const publicKey = testnetAccount[0].publicKey;
@@ -60,7 +50,7 @@ test('Should get liquidity pool deposit as an array', async () => {
     expect(liquidityPoolDeposit).toBeDefined();
     expect(liquidityPoolDeposit.ok).toBe(true);
     expect(liquidityPoolDeposit.data?.liquidityPoolDepositByPublicKey.edges).toBeDefined();
-  });
+  }, 10000);
 
 test('Should get liquidity pool withdraw as an array', async () => {
     const publicKey = testnetAccount[0].publicKey;
@@ -69,13 +59,13 @@ test('Should get liquidity pool withdraw as an array', async () => {
     expect(liquidityPoolWithdraw).toBeDefined();
     expect(liquidityPoolWithdraw.ok).toBe(true);
     expect(liquidityPoolWithdraw.data?.liquidityPoolWithdrawByPublicKey.edges).toBeDefined();
-  });
+  }, 10000);
 
 test('Should get contract events as an array', async () => {
-    const contractId = 'CC4UOWU7HWS44WM5VEU4JWG6FMRKBREFQMWNQLYH6TLM7IY6NPASW5OM';
+    const contractId = testConfig.testnet.factoryAddress;
     const mercuryInstance = new Mercury(mercuryOptions);
     const contractEvents = await mercuryInstance.getContractEvents({ contractId });
     expect(contractEvents).toBeDefined();
     expect(contractEvents.ok).toBe(true);
     expect(contractEvents.data?.eventByContractId.nodes).toBeDefined();
-  });
+  }, 10000);
