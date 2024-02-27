@@ -1,7 +1,27 @@
 # mercury-sdk
 
-Generate docs: `yarn docs`
-Package available in: https://www.npmjs.com/package/mercury-sdk
+[![npm version](https://badge.fury.io/js/mercury-sdk.svg)](https://badge.fury.io/js/mercury-sdk)
+
+The `mercury-sdk` is a comprehensive SDK that empowers developers to seamlessly interact with the [Mercury Indexer](https://mercurydata.app/). It has been developed and it's currently supported by the [PaltaLabs 🥑](https://paltalabs.io/) Team.
+
+**Useful links:**
+- Documentation: https://mercury-sdk.paltalabs.io/
+- NPM Package: https://www.npmjs.com/package/mercury-sdk
+- Github Repo: https://github.com/paltalabs/mercury-sdk/
+- Discord: https://discord.gg/QaezKEWXqX
+
+
+## Installation
+
+You can install the package via npm:
+
+```bash
+npm install mercury-sdk
+```
+Create and fill the `.env` file
+```bash
+cp .env.example .env
+```
 
 ## Usage
 

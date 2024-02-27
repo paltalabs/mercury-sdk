@@ -107,5 +107,11 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
   "include": ["src/**/*"], // Include all files in the src directory
-  "exclude": ["node_modules", "dist"] // Exclude node_modules and dist directories
+  "exclude": ["node_modules", "dist"], // Exclude node_modules and dist directories
+  "typedocOptions": {
+    "entryPoints": ["src/", "src/types/"],
+    "out": "docs",
+    "blockTags": ["@param", "@returns"],
+    "excludeExternals": true,
+  }
 }
