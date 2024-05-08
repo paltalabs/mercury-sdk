@@ -1,15 +1,15 @@
 export interface GetPathPaymentsStrictSendByPublicKeyResponse {
-  pathPaymentsStrictSendByPublicKey: PathPaymentsNodes;
+  pathPaymentsStrictSendByPublicKey: PathPaymentsNodes<NodeStrictSend>;
 }
 export interface GetPathPaymentsStrictReceiveByPublicKeyResponse {
-  pathPaymentsStrictReceiveByPublicKey: PathPaymentsNodes;
+  pathPaymentsStrictReceiveByPublicKey: PathPaymentsNodes<NodeStrictReceive>;
 }
 
-export interface PathPaymentsNodes {
-  nodes: Node[];
+export interface PathPaymentsNodes<N extends NodeBase = Node> {
+  nodes: N[];
 }
 
-export interface Node {
+export interface NodeBase {
   ledgerByLedger: LedgerByLedger;
   accountBySource: AccountBy;
   accountByDestination: AccountBy;
@@ -21,15 +21,25 @@ export interface Node {
   assetByPath5: AssetBy;
   assetBySendAsset: AssetBy;
   destAssetNative: boolean;
-  destMin: string;
   path1Native: boolean;
   path2Native: boolean;
   path3Native: boolean;
   path4Native: boolean;
   path5Native: AssetBy;
-  sendAmount: string;
   sendAssetNative: boolean;
 }
+
+export interface NodeStrictSend extends NodeBase {
+  sendAmount: string;
+  destMin: string;
+}
+
+export interface NodeStrictReceive extends NodeBase {
+  destAmount: string;
+  sendMax: string;
+}
+
+export type Node = NodeStrictSend | NodeStrictReceive;
 
 export interface AccountBy {
   publickey: string;
