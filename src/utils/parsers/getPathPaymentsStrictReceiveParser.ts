@@ -17,9 +17,9 @@ export const getPathPaymentsStrictReceiveParser = (
       return {
         from: node?.accountBySource?.publickey,
         to: node?.accountByDestination?.publickey,
-        sendAmount: node?.sendAmount,
+        sendAmount: node?.destAmount,
         sendAsset: node?.assetBySendAsset?.issuer,
-        destMin: node?.destMin,
+        destMin: node?.sendMax,
         destAsset: node?.assetByDestAsset?.issuer,
       };
     }
