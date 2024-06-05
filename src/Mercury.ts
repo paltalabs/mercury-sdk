@@ -18,7 +18,7 @@ import {
   GetAllContractEventSubscriptionsResponse,
   GetAllFullAccountSubscriptionsResponse,
   ContractEntriesResponse,
-  SubscribeToMultipleLedgerEntriesArgs
+  SubscribeToMultipleLedgerEntriesArgs,
 } from "./types";
 import { SubscribeToContractEventsArgs } from "./types/subscriptions";
 import { toSnakeCase } from "./utils";
@@ -209,13 +209,16 @@ export class Mercury {
       maxSingleSize: this._defaultMaxSingleSize,
       durability: args.durability,
       keyXdr: args.keyXdr,
-      hydrate: args.hydrate?? true,
+      hydrate: args.hydrate ?? true,
     });
-    const response = await this._backendRequest({ method: "POST", url: "/entry", body })
-    .catch((error: string)=>{
-    console.error(error)
-    })
-    return response
+    const response = await this._backendRequest({
+      method: "POST",
+      url: "/entry",
+      body,
+    }).catch((error: string) => {
+      console.error(error);
+    });
+    return response;
   }
 
   /**
@@ -224,19 +227,25 @@ export class Mercury {
    * @param args - The arguments for subscribing to multiple ledger entries.
    * @returns An array of results for each subscribed ledger entry.
    */
-  public async subscribeToMultipleLedgerEntries(args: SubscribeToMultipleLedgerEntriesArgs) {
-    const results = []
-    for(let i = 0; i < args.contractId.length; i++){
+  public async subscribeToMultipleLedgerEntries(
+    args: SubscribeToMultipleLedgerEntriesArgs
+  ) {
+    const results = [];
+    for (let i = 0; i < args.contractId.length; i++) {
       const body = this._createRequestBody({
         contractId: args.contractId[i],
         keyXdr: args.keyXdr,
         durability: args.durability,
-        hydrate: args.hydrate?? true,
+        hydrate: args.hydrate ?? true,
       });
-      const response = await this._backendRequest({ method: "POST", url: "/entry", body })
-      results.push(response)
+      const response = await this._backendRequest({
+        method: "POST",
+        url: "/entry",
+        body,
+      });
+      results.push(response);
     }
-    return results
+    return results;
   }
 
   /**
@@ -422,12 +431,49 @@ export class Mercury {
    * @param args - The query request and optional variables.
    * @returns A promise that resolves to the result of the query.
    */
-  public async getCustomQuery(args: { request: string; variables?: any; }) {
+  public async getCustomQuery(args: { request: string; variables?: any }) {
     return this._graphqlRequest({
       body: {
         request: QUERIES.getCustomQuery(args.request),
         variables: args.variables,
       },
+    });
+  }
+
+  /**
+   * Calls a specific serverless function with the provided arguments.
+   * @param args Object containing the following properties:
+   *  - functionName: Name of the serverless function to call.
+   *  - arguments: Arguments to be passed to the function in object format.
+   * @returns ApiResponse with data or error information.
+   */
+  public async callServerlessFunction(args: {
+    functionName: string;
+    arguments: Object;
+  }) {
+    try {
+      JSON.stringify(args.arguments);
+    } catch (error) {
+      return {
+        ok: false,
+        data: null,
+        error: "Invalid arguments",
+      };
+    }
+
+    const body = {
+      mode: {
+        Function: {
+          fname: args.functionName,
+          arguments: JSON.stringify(args.arguments),
+        },
+      },
+    };
+
+    return this._backendRequest({
+      method: "POST",
+      url: "/zephyr/execute",
+      body,
     });
   }
 }
