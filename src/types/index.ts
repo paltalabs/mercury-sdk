@@ -24,3 +24,4 @@ export { GetAllContractEventSubscriptionsResponse } from "./getAllContractEventS
 export { GetAllFullAccountSubscriptionsResponse } from "./getAllFullAccountSubscriptions";
 export { ContractEntriesResponse, ParsedRouterEntry } from "./getContractEntries";
 export { PairEntry } from "./pairEntry";
+export { ZephyrTableOriginal, ZephyrTableGraphQL } from "./zephyr";

@@ -7,3 +7,4 @@ export { getReceivedPaymentsParser } from "./getReceivedPaymentsParser";
 export { getSentPaymentsParser } from "./getSentPaymentsParser";
 export { factoryInstanceParser } from "./factoryInstanceParser";
 export { pairInstanceParser } from "./pairInstanceParser";
+export { zephyrTableToGraphQLParser } from "./zephyrTableToGraphQLParser";
