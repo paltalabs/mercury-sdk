@@ -8,7 +8,7 @@
   "files": [
     "dist/**/*"
   ],
-  "license": "GNU",
+  "license": "GPL-3.0",
   "private": false,
   "keywords": [
     "mercury",
@@ -24,7 +24,7 @@
     "test": "jest --watchAll"
   },
   "dependencies": {
-    "@stellar/stellar-sdk": "^11.1.0",
+    "@stellar/stellar-sdk": "^12.1.0",
     "axios": "^1.6.2",
     "bigint-conversion": "^2.4.3",
     "dotenv": "^16.3.1",
