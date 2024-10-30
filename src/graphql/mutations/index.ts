@@ -1,1 +1,0 @@
-export { AUTHENTICATE } from "./authenticate";

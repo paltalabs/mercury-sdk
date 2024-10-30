@@ -6,7 +6,8 @@
   "repository": "https://github.com/paltalabs/mercury-sdk",
   "author": "paltalabs",
   "files": [
-    "dist/**/*"
+    "dist/**/*",
+    "postinstall.js"
   ],
   "license": "GPL-3.0",
   "private": false,
@@ -18,10 +19,12 @@
   ],
   "scripts": {
     "build": "tsc",
-    "start:example": "ts-node src/example.ts",
     "dev": "ts-node src/dev.ts",
     "doc": "typedoc --plugin typedoc-plugin-missing-exports",
-    "test": "jest --watchAll"
+    "postinstall": "node postinstall.js",
+    "start:example": "ts-node src/example.ts",
+    "test": "jest --watchAll",
+    "watch": "tsc --watch"
   },
   "dependencies": {
     "@stellar/stellar-sdk": "^12.1.0",

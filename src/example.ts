@@ -13,18 +13,13 @@ dotenv.config();
 
 (async function () {
   const mercuryArgs = {
+    // Make sure all of these variables are set in your `.env` file!
     backendEndpoint: process.env.MERCURY_BACKEND_ENDPOINT!,
     graphqlEndpoint: process.env.MERCURY_GRAPHQL_ENDPOINT!,
-    email: process.env.MERCURY_TESTER_EMAIL,
-    password: process.env.MERCURY_TESTER_PASSWORD,
+    apiKey: process.env.MERCURY_API_KEY,
   };
 
-  const mercuryInstance = new Mercury({
-    backendEndpoint: process.env.MERCURY_BACKEND_ENDPOINT!,
-    graphqlEndpoint: process.env.MERCURY_GRAPHQL_ENDPOINT!,
-    email: process.env.MERCURY_TESTER_EMAIL!,
-    password: process.env.MERCURY_TESTER_PASSWORD!,
-  });
+  const mercuryInstance = new Mercury(mercuryArgs);
 
   const publicKey = "GBDJYBFPYUY7XXI5XCT473VJRT7PRGMRA2AJ2TKUKGPLJ5ZGVPJYKEAR";
   const publicKey2 = "GARDNDBY2VPXVQ46JJR52LNLFHIRQCQZATAYGOERKM4YBWZRUKIJ73BC";

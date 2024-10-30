@@ -5,7 +5,6 @@ export {
   SubscribeToLedgerEntriesExpirationArgs,
   SubscribeToMultipleLedgerEntriesArgs
 } from "./subscriptions";
-export { AuthenticateResponse } from "./authenticate";
 export {
   GetPathPaymentsStrictSendByPublicKeyResponse,
   GetPathPaymentsStrictReceiveByPublicKeyResponse,
