@@ -25,7 +25,7 @@ export interface ParsedRouterEntry {
 
 export interface PairMapping {
   pairs: Pair[];
-}  
+}
 
 export interface Pair {
   [pairsAdresses: string]: string;

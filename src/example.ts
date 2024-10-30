@@ -6,8 +6,8 @@ import {
   getReceivedPaymentsParser,
   getLiquidityPoolWithdrawParser,
   getLiquidityPoolDepositParser,
-  getContractEventsParser
-} from "."
+  getContractEventsParser,
+} from ".";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -30,10 +30,8 @@ dotenv.config();
   });
 
   if (sentPaymentsResponse.ok) {
-    const sentPaymentsParsedData = getSentPaymentsParser(
-      sentPaymentsResponse.data!
-    );
-    console.log("sentPaymentsParsedData")
+    const sentPaymentsParsedData = getSentPaymentsParser(sentPaymentsResponse.data!);
+    console.log("sentPaymentsParsedData");
     console.log(JSON.stringify(sentPaymentsParsedData, null, 2) + "\n");
   }
 
@@ -43,47 +41,42 @@ dotenv.config();
   });
 
   if (receivedPaymentsResponse.ok) {
-    const receivedPaymentsParsedData = getReceivedPaymentsParser(
-      receivedPaymentsResponse.data!
-    );
-    console.log("receivedPaymentsParsedData")
+    const receivedPaymentsParsedData = getReceivedPaymentsParser(receivedPaymentsResponse.data!);
+    console.log("receivedPaymentsParsedData");
     console.log(JSON.stringify(receivedPaymentsParsedData, null, 2) + "\n");
   }
 
   //Liquidity Pool Withdraw
-  const liquidityPoolWithdrawResponse =
-    await mercuryInstance.getLiquidityPoolWithdraw({
-      publicKey: publicKey2,
-    });
+  const liquidityPoolWithdrawResponse = await mercuryInstance.getLiquidityPoolWithdraw({
+    publicKey: publicKey2,
+  });
 
   if (liquidityPoolWithdrawResponse.ok) {
     const liquidityPoolWithdrawParsedData = getLiquidityPoolWithdrawParser(
-      liquidityPoolWithdrawResponse.data!
+      liquidityPoolWithdrawResponse.data!,
     );
-    console.log("liquidityPoolWithdrawParsedData")
+    console.log("liquidityPoolWithdrawParsedData");
     console.log(JSON.stringify(liquidityPoolWithdrawParsedData, null, 2) + "\n");
   }
 
   //Liquidity Pool Deposit
-  const liquidityPoolDepositResponse =
-    await mercuryInstance.getLiquidityPoolDeposit({
-      publicKey,
-    });
+  const liquidityPoolDepositResponse = await mercuryInstance.getLiquidityPoolDeposit({
+    publicKey,
+  });
 
   if (liquidityPoolDepositResponse.ok) {
     const liquidityPoolDepositParsedData = getLiquidityPoolDepositParser(
-      liquidityPoolDepositResponse.data!
+      liquidityPoolDepositResponse.data!,
     );
-    console.log("liquidityPoolDepositParsedData")
+    console.log("liquidityPoolDepositParsedData");
     console.log(JSON.stringify(liquidityPoolDepositParsedData, null, 2) + "\n");
   }
-
 
   const getContractEventsRes = await mercuryInstance.getContractEvents({
     contractId: routerContractAddress,
   });
   const parsedContractEvents = getContractEventsParser(getContractEventsRes.data!);
   const eventByPublicKey = parsedContractEvents.filter((event) => event.to === publicKey);
-  console.log("eventByPublicKey")
+  console.log("eventByPublicKey");
   console.log(JSON.stringify(eventByPublicKey, null, 2) + "\n");
 })();

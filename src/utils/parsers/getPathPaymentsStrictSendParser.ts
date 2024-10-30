@@ -10,20 +10,18 @@ export interface getPathPaymentsStrictSendParsed {
 }
 
 export const getPathPaymentsStrictSendParser = (
-  data: GetPathPaymentsStrictSendByPublicKeyResponse
+  data: GetPathPaymentsStrictSendByPublicKeyResponse,
 ): getPathPaymentsStrictSendParsed[] => {
-  const parsedData = data?.pathPaymentsStrictSendByPublicKey?.nodes?.map(
-    (node) => {
-      return {
-        from: node?.accountBySource?.publickey,
-        to: node?.accountByDestination?.publickey,
-        sendAmount: node?.sendAmount,
-        sendAsset: node?.assetBySendAsset?.issuer,
-        destMin: node?.destMin,
-        destAsset: node?.assetByDestAsset?.issuer,
-      };
-    }
-  );
+  const parsedData = data?.pathPaymentsStrictSendByPublicKey?.nodes?.map((node) => {
+    return {
+      from: node?.accountBySource?.publickey,
+      to: node?.accountByDestination?.publickey,
+      sendAmount: node?.sendAmount,
+      sendAsset: node?.assetBySendAsset?.issuer,
+      destMin: node?.destMin,
+      destAsset: node?.assetByDestAsset?.issuer,
+    };
+  });
 
   return parsedData;
 };
