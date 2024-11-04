@@ -53,7 +53,7 @@ export class Mercury {
    */
   constructor(options: MercuryOptions) {
     if (options.shouldFetchApiKey && options.jwt) {
-      this._accessToken = options.jwt;
+      this._accessToken = `Bearer ${options.jwt}`;
     } else if (options.shouldFetchApiKey) {
       throw new Error("You must provide a JWT token if you want to fetch an API key.");
     } else if (options.jwt) {
