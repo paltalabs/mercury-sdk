@@ -11,21 +11,19 @@ export interface getLiquidityPoolWithdrawParsed {
 }
 
 export const getLiquidityPoolWithdrawParser = (
-  data: LiquidityPoolWithdrawByPublicKeyResponse
+  data: LiquidityPoolWithdrawByPublicKeyResponse,
 ): getLiquidityPoolWithdrawParsed[] => {
-  const parsedData = data?.liquidityPoolWithdrawByPublicKey?.edges?.map(
-    (edge) => {
-      return {
-        source: edge?.node?.source,
-        poolId: edge?.node?.poolId,
-        amount: edge?.node?.amount,
-        maxAmountA: edge?.node?.maxAmountA,
-        maxAmountB: edge?.node?.maxAmountB,
-        ledger: edge?.node?.txInfoByTx?.ledgerByLedger?.sequence,
-        timestamp: edge?.node?.txInfoByTx?.ledgerByLedger?.closeTime,
-      };
-    }
-  );
+  const parsedData = data?.liquidityPoolWithdrawByPublicKey?.edges?.map((edge) => {
+    return {
+      source: edge?.node?.source,
+      poolId: edge?.node?.poolId,
+      amount: edge?.node?.amount,
+      maxAmountA: edge?.node?.maxAmountA,
+      maxAmountB: edge?.node?.maxAmountB,
+      ledger: edge?.node?.txInfoByTx?.ledgerByLedger?.sequence,
+      timestamp: edge?.node?.txInfoByTx?.ledgerByLedger?.closeTime,
+    };
+  });
 
   return parsedData;
 };

@@ -13,18 +13,15 @@ export interface getReceivedPaymentsParsed {
 }
 
 export const getReceivedPaymentsParser = (
-  data: GetReceivedPaymentsResponse
+  data: GetReceivedPaymentsResponse,
 ): getReceivedPaymentsParsed[] => {
-  const parsedData = data?.paymentsToPublicKey?.edges?.map((payment) => {  
+  const parsedData = data?.paymentsToPublicKey?.edges?.map((payment) => {
     return {
       from: payment?.node?.accountBySource?.publickey,
       to: payment?.node?.accountByDestination?.publickey,
       amount: payment?.node?.amount,
       assetNative: payment?.node?.assetNative,
-      asset: stellarAssetId(
-        payment?.node?.assetByAsset?.code,
-        payment?.node?.assetByAsset?.issuer
-      ),
+      asset: stellarAssetId(payment?.node?.assetByAsset?.code, payment?.node?.assetByAsset?.issuer),
       ledger: payment?.node?.txInfoByTx?.ledgerByLedger?.sequence,
       timestamp: payment?.node?.txInfoByTx?.ledgerByLedger?.closeTime,
     };
@@ -32,4 +29,3 @@ export const getReceivedPaymentsParser = (
 
   return parsedData;
 };
-

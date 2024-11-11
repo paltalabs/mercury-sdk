@@ -3,18 +3,14 @@ export {
   SubscribeToFullAccountArgs,
   SubscribeToLedgerEntriesArgs,
   SubscribeToLedgerEntriesExpirationArgs,
-  SubscribeToMultipleLedgerEntriesArgs
+  SubscribeToMultipleLedgerEntriesArgs,
 } from "./subscriptions";
-export { AuthenticateResponse } from "./authenticate";
 export {
   GetPathPaymentsStrictSendByPublicKeyResponse,
   GetPathPaymentsStrictReceiveByPublicKeyResponse,
 } from "./pathPayments";
 
-export {
-  GetReceivedPaymentsResponse,
-  GetSentPaymentsResponse,
-} from "./payments";
+export { GetReceivedPaymentsResponse, GetSentPaymentsResponse } from "./payments";
 export {
   LiquidityPoolDepositByPublicKeyResponse,
   LiquidityPoolWithdrawByPublicKeyResponse,

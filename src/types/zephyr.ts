@@ -1,4 +1,3 @@
-
 export interface ZephyrTableOriginal {
   address: string;
 }

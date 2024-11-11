@@ -3,7 +3,6 @@ import { GraphQLClient } from "graphql-request";
 import {
   ApiResponse,
   backendRequestArgs,
-  AuthenticateResponse,
   GetPathPaymentsStrictSendByPublicKeyResponse,
   GetPathPaymentsStrictReceiveByPublicKeyResponse,
   GetReceivedPaymentsResponse,
@@ -22,24 +21,21 @@ import {
 } from "./types";
 import { SubscribeToContractEventsArgs } from "./types/subscriptions";
 import { toSnakeCase } from "./utils";
-import { MUTATIONS, QUERIES } from "./graphql";
+import { QUERIES } from "./graphql";
 
 interface MercuryOptions {
   backendEndpoint: string;
   graphqlEndpoint: string;
   defaultMaxSingleSize?: number;
-  email: string;
-  password: string;
-  updateTokenOnRequest?: boolean;
+  shouldFetchApiKey?: boolean;
+  jwt?: string;
+  apiKey?: string;
 }
 
 export class Mercury {
   private readonly _backendEndpoint: string;
   private readonly _graphqlClient: GraphQLClient;
   private readonly _defaultMaxSingleSize: number;
-  private readonly _email: string;
-  private readonly _password: string;
-  private readonly _updateTokenOnRequest: boolean;
   private _accessToken: string = "";
 
   /**
@@ -47,34 +43,51 @@ export class Mercury {
    * @param options Configuration options for the Mercury instance.
    *  - backendEndpoint: URL of the backend endpoint.
    *  - graphqlEndpoint: URL of the graphql endpoint.
-   *  - email: Email associated with the Mercury account (optional).
-   *  - password: Password for the Mercury account (optional).
    *  - defaultMaxSingleSize (optional): Default max single size for subscriptions.
-   *  If not provided, the default value is 2000.
-   * - updateTokenOnRequest (optional): Whether to update the access token when calling a request or not.
-   *  If not provided, the default value is true. If you set this to false, you will have to manually call updateAccessToken() to generate/update the access token.
+   *    If not provided, the default value is 2000.
+   *  - shouldFetchApiKey (optional): Whether to fetch an API key from the server or not.
+   *    If not provided, it is left undefined.
+   *  - jwt (optional): JWT token for fetching an API key. Must be provided if shouldFetchApiKey is true.
+   *  - apiKey (optional): API key for the Mercury account. Must always be provided, except in the
+   *    post-install script, which is where the key is fetched to begin with.
    */
   constructor(options: MercuryOptions) {
+    if (options.shouldFetchApiKey && options.jwt) {
+      this._accessToken = `Bearer ${options.jwt}`;
+    } else if (options.shouldFetchApiKey) {
+      throw new Error("You must provide a JWT token if you want to fetch an API key.");
+    } else if (options.jwt) {
+      throw new Error("Please provide a JWT token only if you are creating an API key");
+    } else if (options.apiKey) {
+      this._accessToken = options.apiKey;
+    } else {
+      throw new Error("You must provide an API key.");
+    }
+
     this._backendEndpoint = options.backendEndpoint;
-    this._graphqlClient = new GraphQLClient(
-      options.graphqlEndpoint + "/graphql"
-    );
+    this._graphqlClient = new GraphQLClient(options.graphqlEndpoint + "/graphql");
     this._defaultMaxSingleSize = options.defaultMaxSingleSize ?? 2000;
-    this._email = options.email;
-    this._password = options.password;
-    this._updateTokenOnRequest = options.updateTokenOnRequest ?? true;
   }
 
   /**
-   * Updates _accessToken
-   * @param token token to be updated
+   * Generates a new API key for the Mercury account.
+   * @returns The new API key.
    */
-  private _updateAccessToken(token: string) {
-    this._accessToken = token;
+  public async generateApiKey() {
+    const response = await this._backendRequest<{ key: string }>({
+      method: "POST",
+      url: "/v2/key",
+    });
+
+    if (response.ok && response.data?.key) {
+      return response.data.key;
+    }
+
+    throw new Error("Failed to generate API key.");
   }
 
   /**
-   * Usefull for creating request bodies in snake case for the mercury backend.
+   * Useful for creating request bodies in snake case for the Mercury backend.
    * @param methodArgs Arguments specific to the method.
    * @param defaultArgs Default arguments to be combined.
    * @returns The combined arguments in snake case.
@@ -93,28 +106,18 @@ export class Mercury {
    * - method HTTP method (GET, POST, PUT, DELETE).
    * - url Endpoint URL.
    * - body Request body.
-   * - updateToken Whether to update the access token when calling the request or not.
    * @returns ApiResponse with data or error information.
    */
-  private async _backendRequest<T = any>(
-    args: backendRequestArgs
-  ): Promise<ApiResponse<T>> {
-    const {
-      method,
-      body,
-      url,
-      updateToken = this._updateTokenOnRequest,
-    } = args;
+  private async _backendRequest<T = any>(args: backendRequestArgs): Promise<ApiResponse<T>> {
+    const { method, body, url } = args;
     try {
-      if (updateToken) {
-        await this.updateAccessToken();
-      }
       const { data } = await axios.request<T>({
         method,
         url: this._backendEndpoint + url,
         data: body,
         headers: {
-          Authorization: `Bearer ${this._accessToken}`,
+          Authorization: this._accessToken,
+          "Content-Type": "application/json",
         },
       });
       return { ok: true, data };
@@ -133,25 +136,18 @@ export class Mercury {
    *  - body: Request body.
    *    - request: GraphQL request.
    *    - variables: GraphQL variables.
-   *  - updateToken: Whether to update the access token when calling the request or not.
    *  - headers: Request headers.
    * @returns ApiResponse with data or error information.
    */
-  private async _graphqlRequest<T = any>(
-    args: GraphQLRequestArgs
-  ): Promise<ApiResponse<T>> {
-    const { body, headers, updateToken = this._updateTokenOnRequest } = args;
+  private async _graphqlRequest<T = any>(args: GraphQLRequestArgs): Promise<ApiResponse<T>> {
+    const { body, headers } = args;
     try {
-      if (updateToken) {
-        await this.updateAccessToken();
-      }
-
       const data = await this._graphqlClient.request<T>(
         body.request,
         body.variables,
         headers ?? {
-          Authorization: `Bearer ${this._accessToken}`,
-        }
+          Authorization: this._accessToken,
+        },
       );
 
       return { ok: true, data };
@@ -227,9 +223,7 @@ export class Mercury {
    * @param args - The arguments for subscribing to multiple ledger entries.
    * @returns An array of results for each subscribed ledger entry.
    */
-  public async subscribeToMultipleLedgerEntries(
-    args: SubscribeToMultipleLedgerEntriesArgs
-  ) {
+  public async subscribeToMultipleLedgerEntries(args: SubscribeToMultipleLedgerEntriesArgs) {
     const results = [];
     for (let i = 0; i < args.contractId.length; i++) {
       const body = this._createRequestBody({
@@ -254,35 +248,9 @@ export class Mercury {
    *   - hashXdr: Base64 xdr of your entry's hash
    * @returns Subscription result.
    */
-  public async subscribeToLedgerEntriesExpiration(
-    args: SubscribeToLedgerEntriesExpirationArgs
-  ) {
+  public async subscribeToLedgerEntriesExpiration(args: SubscribeToLedgerEntriesExpirationArgs) {
     const body = this._createRequestBody(args);
     return this._backendRequest({ method: "POST", url: "/expiration", body });
-  }
-
-  /**
-   * Updates access token.
-   * @returns Update access token result.
-   */
-  public async updateAccessToken() {
-    const res = await this._graphqlRequest<AuthenticateResponse>({
-      body: {
-        request: MUTATIONS.AUTHENTICATE,
-        variables: {
-          email: this._email,
-          password: this._password,
-        },
-      },
-      headers: {},
-      updateToken: false,
-    });
-
-    if (res.ok && res.data?.authenticate?.jwtToken) {
-      this._updateAccessToken(res.data.authenticate.jwtToken);
-    }
-
-    return res;
   }
 
   /**
@@ -335,14 +303,12 @@ export class Mercury {
    * @returns Path payments strict receive by public key.
    */
   public async getPathPaymentsStrictReceive(args: { publicKey: string }) {
-    return this._graphqlRequest<GetPathPaymentsStrictReceiveByPublicKeyResponse>(
-      {
-        body: {
-          request: QUERIES.GET_PATH_PAYMENTS_STRICT_RECEIVE_BY_PUBLIC_KEY,
-          variables: args,
-        },
-      }
-    );
+    return this._graphqlRequest<GetPathPaymentsStrictReceiveByPublicKeyResponse>({
+      body: {
+        request: QUERIES.GET_PATH_PAYMENTS_STRICT_RECEIVE_BY_PUBLIC_KEY,
+        variables: args,
+      },
+    });
   }
 
   /**
@@ -447,10 +413,7 @@ export class Mercury {
    *  - arguments: Arguments to be passed to the function in object format.
    * @returns ApiResponse with data or error information.
    */
-  public async callServerlessFunction(args: {
-    functionName: string;
-    arguments: Object;
-  }) {
+  public async callServerlessFunction(args: { functionName: string; arguments: Object }) {
     try {
       JSON.stringify(args.arguments);
     } catch (error) {

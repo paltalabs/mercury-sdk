@@ -45,9 +45,7 @@ export function scvalToBigInt(scval: xdr.ScVal | undefined): BigInt {
       // return bufToBigint(new Int32Array([a.high, a.low, b.high, b.low]));
     }
     default: {
-      throw new Error(
-        `Invalid type for scvalToBigInt: ${scval?.switch().name}`
-      );
+      throw new Error(`Invalid type for scvalToBigInt: ${scval?.switch().name}`);
     }
   }
 }
@@ -157,10 +155,8 @@ export function i128ToScVal(i: bigint): xdr.ScVal {
   return xdr.ScVal.scvI128(
     new xdr.Int128Parts({
       lo: xdr.Uint64.fromString((i & BigInt(0xffffffffffffffffn)).toString()),
-      hi: xdr.Int64.fromString(
-        ((i >> BigInt(64)) & BigInt(0xffffffffffffffffn)).toString()
-      ),
-    })
+      hi: xdr.Int64.fromString(((i >> BigInt(64)) & BigInt(0xffffffffffffffffn)).toString()),
+    }),
   );
 }
 
@@ -168,23 +164,22 @@ export function u128ToScVal(i: bigint): xdr.ScVal {
   return xdr.ScVal.scvU128(
     new xdr.UInt128Parts({
       lo: xdr.Uint64.fromString((i & BigInt(0xffffffffffffffffn)).toString()),
-      hi: xdr.Int64.fromString(
-        ((i >> BigInt(64)) & BigInt(0xffffffffffffffffn)).toString()
-      ),
-    })
+      hi: xdr.Int64.fromString(((i >> BigInt(64)) & BigInt(0xffffffffffffffffn)).toString()),
+    }),
   );
 }
 
 export function stellarAssetId(codeHex: string, issuer: string) {
-  if (codeHex == undefined || issuer == undefined) return undefined
-  const code = hexToString(codeHex.slice(2))
-return `${code}:${issuer}`
+  if (codeHex == undefined || issuer == undefined) return undefined;
+  const code = hexToString(codeHex.slice(2));
+  return `${code}:${issuer}`;
 }
 
 export function hexToString(hex: string) {
- const convertedString = hex.match(/.{1,2}/g)! // Split the string into pairs of characters
-   .map((byte) => String.fromCharCode(parseInt(byte, 16))) // Convert each pair to its corresponding character code
-   .join(""); // Join the characters into a single string
- const trimmedString = convertedString.replace(/\0+$/, ''); // Remove trailing zeros
- return trimmedString;
+  const convertedString = hex
+    .match(/.{1,2}/g)! // Split the string into pairs of characters
+    .map((byte) => String.fromCharCode(parseInt(byte, 16))) // Convert each pair to its corresponding character code
+    .join(""); // Join the characters into a single string
+  const trimmedString = convertedString.replace(/\0+$/, ""); // Remove trailing zeros
+  return trimmedString;
 }

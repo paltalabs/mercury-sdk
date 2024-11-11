@@ -1,5 +1,7 @@
 import { gql } from "graphql-request";
 
-export const getCustomQuery = (query: string) => { 
-    return gql`${query}`
-}
+export const getCustomQuery = (query: string) => {
+  return gql`
+    ${query}
+  `;
+};

@@ -1,14 +1,14 @@
 import { gql } from "graphql-request";
 
 export const GET_CONTRACT_ENTRIES = gql`
-query MyQuery($contractId: String!) {
+  query MyQuery($contractId: String!) {
     entryUpdateByContractId(contract: $contractId) {
-        edges {
-            node {
-                keyXdr
-                valueXdr
-            }
+      edges {
+        node {
+          keyXdr
+          valueXdr
         }
+      }
     }
-}
+  }
 `;
